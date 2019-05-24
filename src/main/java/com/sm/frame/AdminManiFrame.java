@@ -16,6 +16,9 @@ import java.awt.event.*;
 import java.io.File;
 import java.util.List;
 
+/**
+ * wanghuanle
+ */
 public class AdminManiFrame extends JFrame {
 
     private JButton 院系管理Button;
