@@ -3,13 +3,21 @@ package com.sm.frame;
 import com.sm.entity.Admin;
 import com.sm.entity.CClass;
 import com.sm.entity.Department;
+import com.sm.entity.StudentVO;
 import com.sm.factory.DAOFactory;
 import com.sm.factory.ServiceFacotry;
 import com.sm.thread.TimeThread;
 import com.sm.ui.ImgPanel;
 import com.sm.utils.AliOSSUtil;
+import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.*;
@@ -54,6 +62,26 @@ public class AdminManiFrame extends JFrame {
     private JPopupMenu jPopupMenu;
     private JMenuItem item2;
     private JComboBox<Department> comboBox1;
+    private JPanel stuTopPanel;
+    private JComboBox comboBox2;
+    private JComboBox comboBox3;
+    private JTextField textField2;
+    private JButton 搜索Button;
+    private JButton 新增学生Button;
+    private JButton 批量导入Button;
+    private ImgPanel infoPanel;
+    private JLabel avatarLabel;
+    private JLabel 学号;
+    private JLabel xuehaoLabel;
+    private JLabel yuanxiLabel;
+    private JLabel banjiLabel;
+    private JLabel xingmingLabel;
+    private JLabel xingbie;
+    private JTextField addressTextField;
+    private JTextField phoneTextField;
+    private JButton 编辑Button;
+    private JPanel tablePanel;
+    private JLabel brithLabel;
 
     public AdminManiFrame(Admin admin) {
         this.admin = admin;
@@ -90,6 +118,10 @@ public class AdminManiFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(centerPanel,"Card3");
+                infoPanel.setFileName("bg4.png");
+                infoPanel.repaint();
+                showStudentTable();
+
             }
         });
         奖惩管理Button.addActionListener(new ActionListener() {
@@ -354,6 +386,50 @@ public class AdminManiFrame extends JFrame {
             jPopupMenu.add(item2);
             jList.add(jPopupMenu);
         }
+    }
+    private void showStudentTable(){
+        List<StudentVO> studentVOList = ServiceFacotry.getStudnetServiceInstance().selectAll();
+        JTable table = new JTable();
+        DefaultTableModel model = new DefaultTableModel();
+        table.setModel(model);
+        model.setColumnIdentifiers(new String[]{"学号","院系","班级","姓名","性别","地址","手机号","出生日期","头像"});
+        for (StudentVO student:studentVOList) {
+            Object[] objects = new Object[]{student.getId(),student.getDepartmentName(),student.getClassName(),student.getStudentName(),
+                    student.getGender(),student.getAddress(),student.getPhone(),student.getBirthday(),
+                    student.getAvatar()};
+            model.addRow(objects);
+        }
+        TableColumn tc = table.getColumnModel().getColumn(8);
+        tc.setMinWidth(0);
+        tc.setMaxWidth(0);
+        JTableHeader head = table.getTableHeader();
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        head.setDefaultRenderer(hr);
+        head.setPreferredSize(new Dimension(head.getWidth(),40));
+        head.setFont(new Font("楷体",Font.PLAIN,22));
+        table.setRowHeight(35);
+        table.setBackground(new Color(91,196,234));
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        table.setDefaultRenderer(Object.class,r);
+        JScrollPane scrollPane = new JScrollPane(table,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        tablePanel.add(scrollPane);
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int row = table.getSelectedRow();
+                xuehaoLabel.setText(table.getValueAt(row,0).toString());
+                yuanxiLabel.setText(table.getValueAt(row,1).toString());
+                banjiLabel.setText(table.getValueAt(row,2).toString());
+                xingmingLabel.setText(table.getValueAt(row,3).toString());
+                xingbie.setText(table.getValueAt(row,4).toString());
+                addressTextField.setText(table.getValueAt(row,5).toString());
+                phoneTextField.setText(table.getValueAt(row,6).toString());
+                brithLabel.setText(table.getValueAt(row,7).toString());
+                avatarLabel.setText("<html><img src ='"+table.getValueAt(row,8).toString()+"'/><html>");
+            }
+        });
     }
     public static void main(String[] args) throws Exception {
         String lookAndFeel = UIManager.getSystemLookAndFeelClassName();
