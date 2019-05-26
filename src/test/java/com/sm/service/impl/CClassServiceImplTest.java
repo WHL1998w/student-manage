@@ -23,4 +23,10 @@ public class CClassServiceImplTest {
         List<CClass> cClassList = cClassService.selectByDepartmentId(1);
         cClassList.forEach(cClass -> System.out.println(cClass));
     }
+
+    @Test
+    public void selectAll() {
+        List<CClass> cClassList = cClassService.selectAllClass();
+        cClassList.forEach(cClass -> System.out.println(cClass));
+    }
 }

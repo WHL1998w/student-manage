@@ -13,4 +13,44 @@ public interface StudnetDAO {
      * @throws SQLException
      */
     List<StudentVO> selectAll() throws SQLException;
+
+    /**
+     * 根据院系id查询学生
+     * @param departmentId
+     * @return int
+     * @throws SQLException
+     */
+    List<StudentVO> selectByDepartmentId(int departmentId) throws SQLException;
+
+    /**
+     * 根据班级id查询学生
+     * @param classId
+     * @return int
+     * @throws SQLException
+     */
+    List<StudentVO> selectByCClassId(int classId) throws SQLException;
+
+    /**
+     * 根据关键字查询学生
+     * @param keywords
+     * @return String
+     * @throws SQLException
+     */
+    List<StudentVO> selectByKeywords(String keywords) throws SQLException;
+
+    /**
+     * 新增学生
+     * @param studentVO
+     * @return int
+     * @throws SQLException
+     */
+    int insert(StudentVO studentVO) throws SQLException;
+
+    /**
+     * 删除学生
+     * @param id
+     * @return String
+     * @throws SQLException
+     */
+    int deletStudentById(String id) throws SQLException;
 }

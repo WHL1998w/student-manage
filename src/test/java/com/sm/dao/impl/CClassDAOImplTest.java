@@ -5,6 +5,7 @@ import com.sm.entity.CClass;
 import com.sm.factory.DAOFactory;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -17,6 +18,8 @@ public class CClassDAOImplTest {
         List<CClass> cClassList = null;
         try {
             cClassList = cClassDAO.selectByDepartmentId(1);
+        } catch (IOException e) {
+            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,10 +37,22 @@ public class CClassDAOImplTest {
        cClass.setDepartmentId(1);
        cClass.setClassName("测试班级");
         try {
-            int n = cClassDAO.insertCClass(cClass);
+            int n = cClassDAO.insertClass(cClass);
             equals(n);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void selectAll() {
+        List<CClass> cClassList = null;
+        try {
+            cClassList = cClassDAO.selectAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        cClassList.forEach(cClass -> System.out.println(cClass));
+
     }
 }

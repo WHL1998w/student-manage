@@ -63,8 +63,8 @@ public class AdminManiFrame extends JFrame {
     private JMenuItem item2;
     private JComboBox<Department> comboBox1;
     private JPanel stuTopPanel;
-    private JComboBox comboBox2;
-    private JComboBox comboBox3;
+    private JComboBox<Department> comboBox2;
+    private JComboBox<CClass> comboBox3;
     private JTextField textField2;
     private JButton 搜索Button;
     private JButton 新增学生Button;
@@ -79,9 +79,11 @@ public class AdminManiFrame extends JFrame {
     private JLabel xingbie;
     private JTextField addressTextField;
     private JTextField phoneTextField;
-    private JButton 编辑Button;
     private JPanel tablePanel;
     private JLabel brithLabel;
+    private JButton 编辑Button;
+    private JButton 初始化数据Button;
+    private String keywords;
 
     public AdminManiFrame(Admin admin) {
         this.admin = admin;
@@ -118,10 +120,65 @@ public class AdminManiFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(centerPanel,"Card3");
-                infoPanel.setFileName("bg4.png");
+                infoPanel.setFileName("bg5_副本.png");
                 infoPanel.repaint();
-                showStudentTable();
+                List<StudentVO> studentVOList = ServiceFacotry.getStudnetServiceInstance().selectAll();
+                showStudentTable(studentVOList);
 
+                //两个下拉框初始化显示数据，因为里面元素都是对象，所以这样进行了处理
+                Department tip1 = new Department();
+                tip1.setDepartmentName("请选择院系");
+                comboBox2.addItem(tip1);
+                CClass tip2 = new CClass();
+                tip2.setClassName("请选择班级");
+                comboBox3.addItem(tip2);
+                //初始化院系下拉框数据
+                List<Department> departmentList = ServiceFacotry.getDempartmentServiceInstance().selectAll();
+                for (Department department:departmentList) {
+                    comboBox2.addItem(department);
+                }
+
+                //初始化班级下拉框数据
+                List<CClass> cClassList = ServiceFacotry.getCClassServiceInstance().selectAllClass();
+                for (CClass cClass:cClassList) {
+                    comboBox3.addItem(cClass);
+                }
+
+                //院系下拉框的监听，选中哪项，表格中显示该院系所有学生，
+                comboBox2.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if (e.getStateChange() == ItemEvent.SELECTED){
+                            int index = comboBox2.getSelectedIndex();
+                            if (index != 0){
+                                departmentId = comboBox2.getItemAt(index).getId();
+                                List<StudentVO> studentVOList = ServiceFacotry.getStudnetServiceInstance().selectByDepartmentId(departmentId);
+                                showStudentTable(studentVOList);
+                                List<CClass> cClassList = ServiceFacotry.getCClassServiceInstance().selectByDepartmentId(departmentId);
+                                comboBox3.removeAllItems();
+                                CClass tip = new CClass();
+                                tip.setClassName("请选择班级");
+                                comboBox3.addItem(tip);
+                                for (CClass cClass:cClassList) {
+                                    comboBox3.addItem(cClass);
+                                }
+                            }
+                        }
+                    }
+                });
+                comboBox3.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if (e.getStateChange() == ItemEvent.SELECTED){
+                            int index = comboBox3.getSelectedIndex();
+                            if (index != 0){
+                                int classId = comboBox3.getItemAt(index).getId();
+                                List<StudentVO> studentVOList = ServiceFacotry.getStudnetServiceInstance().selectByCClassId(classId);
+                                showStudentTable(studentVOList);
+                            }
+                        }
+                    }
+                });
             }
         });
         奖惩管理Button.addActionListener(new ActionListener() {
@@ -240,6 +297,46 @@ public class AdminManiFrame extends JFrame {
                     textField1.setText("");
                 }else {
                     JOptionPane.showMessageDialog(rootPanel,"新增班级失败");
+                }
+            }
+        });
+        初始化数据Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //还原表格数据
+                List<StudentVO> studentVOList = ServiceFacotry.getStudnetServiceInstance().selectAll();
+                showStudentTable(studentVOList);
+                //院系下拉框还原
+                comboBox2.setSelectedIndex(0);
+                //班级下拉框数据还原
+                comboBox3.removeAllItems();
+                CClass tip2 = new CClass();
+                tip2.setClassName("请选择班级");
+                comboBox3.addItem(tip2);
+                List<CClass> cClassList = ServiceFacotry.getCClassServiceInstance().selectAllClass();
+                for (CClass cClass:cClassList) {
+                    comboBox3.addItem(cClass);
+                }
+                //右侧个人信息显示去数据还原
+                //avatarLabel.setText("<html><img src ='https://student-manage-whl.oss-cn-beijing.aliyuncs.com/logo/1.jpg'/><html>");
+               // System.out.println("<html><img src ='\"https://student-manage-whl.oss-cn-beijing.aliyuncs.com/logo/avarat_%E5%89%AF%E6%9C%AC.jpg\"'/><html>");
+                xuehaoLabel.setText("未选择");
+                yuanxiLabel.setText("未选择");
+                banjiLabel.setText("未选择");
+                xingmingLabel.setText("未选择");
+                xingbie.setText("未选择");
+                brithLabel.setText("未选择");
+                phoneTextField.setText("");
+                addressTextField.setText("");
+            }
+        });
+        搜索Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keywords = textField2.getText().trim();
+                List<StudentVO> studentVOList = ServiceFacotry.getStudnetServiceInstance().selectByKeywords(keywords);
+                if (studentVOList != null){
+                    showStudentTable(studentVOList);
                 }
             }
         });
@@ -365,7 +462,7 @@ public class AdminManiFrame extends JFrame {
                             public void actionPerformed(ActionEvent e) {
                                 int choice = JOptionPane.showConfirmDialog(depPanel,"确定删除吗？");
                                 if (choice == 0){
-                                    ServiceFacotry.getCClassServiceInstance().deletCClass(cClass.getId());
+                                    ServiceFacotry.getCClassServiceInstance().deleteClassById(cClass.getId());
                                     listModel.remove(index);
                                     showTree(ServiceFacotry.getDempartmentServiceInstance().selectAll());
                                 }
@@ -387,8 +484,8 @@ public class AdminManiFrame extends JFrame {
             jList.add(jPopupMenu);
         }
     }
-    private void showStudentTable(){
-        List<StudentVO> studentVOList = ServiceFacotry.getStudnetServiceInstance().selectAll();
+    private void showStudentTable(List<StudentVO> studentVOList){
+        tablePanel.removeAll();
         JTable table = new JTable();
         DefaultTableModel model = new DefaultTableModel();
         table.setModel(model);
@@ -415,6 +512,8 @@ public class AdminManiFrame extends JFrame {
         table.setDefaultRenderer(Object.class,r);
         JScrollPane scrollPane = new JScrollPane(table,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         tablePanel.add(scrollPane);
+        //刷新数据
+        tablePanel.revalidate();
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {

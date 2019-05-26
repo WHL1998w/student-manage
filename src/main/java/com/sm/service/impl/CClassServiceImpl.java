@@ -4,42 +4,55 @@ import com.sm.dao.CClassDAO;
 import com.sm.entity.CClass;
 import com.sm.factory.DAOFactory;
 import com.sm.service.CClassService;
-
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 public class CClassServiceImpl implements CClassService {
-    private CClassDAO cClassDAO = DAOFactory.getCClassDAOInstance();
+    CClassDAO cClassDAO = DAOFactory.getCClassDAOInstance();
     @Override
     public List<CClass> selectByDepartmentId(int departmentId) {
         List<CClass> cClassList = null;
         try {
             cClassList = cClassDAO.selectByDepartmentId(departmentId);
         } catch (SQLException e) {
-            System.out.println("班级查询异常");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return cClassList;
+    }
+
+    @Override
+    public int deleteClassById(int id) {
+        int n = 0;
+        try {
+            n = cClassDAO.deleteById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n;
     }
 
     @Override
     public int addCClass(CClass cClass) {
         int n = 0;
         try {
-            n = cClassDAO.insertCClass(cClass);
+            n = cClassDAO.insertClass(cClass);
         } catch (SQLException e) {
-            System.out.println("新增班级信息出现错误");
+            System.err.print("新增院系信息出现异常");
         }
         return n;
     }
 
     @Override
-    public void deletCClass(int id) {
+    public List<CClass> selectAllClass() {
+        List<CClass> cClassList = null;
         try {
-            cClassDAO.deleteById(id);
+            cClassList = cClassDAO.selectAll();
         } catch (SQLException e) {
-            System.out.println("删除班级出现错误");
+            e.printStackTrace();
         }
+        return cClassList;
     }
-
-
 }
