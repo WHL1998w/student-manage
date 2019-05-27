@@ -13,6 +13,10 @@ import static org.junit.Assert.*;
 public class DepartmentDAOImplTest {
 
     private DepartmentDAO departmentDAO = DAOFactory.getDepartmentDAOInstance();
+
+    /**
+     * 查询所有院系
+     */
     @Test
     public void getAll() {
         List<Department> departmentList = null;
@@ -24,6 +28,9 @@ public class DepartmentDAOImplTest {
         departmentList.forEach(department -> System.out.println(department));
     }
 
+    /**
+     * 新增院系
+     */
     @Test
     public void insertDepartment() {
         Department department = new Department();
@@ -38,8 +45,15 @@ public class DepartmentDAOImplTest {
         }
     }
 
+    /**
+     * 删除院系
+     */
     @Test
     public void deleteDepartmentById() {
-
+        try {
+            departmentDAO.deleteDepartmentById(8);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

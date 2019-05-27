@@ -1,9 +1,6 @@
 package com.sm.frame;
 
-import com.sm.entity.Admin;
-import com.sm.entity.CClass;
-import com.sm.entity.Department;
-import com.sm.entity.StudentVO;
+import com.sm.entity.*;
 import com.sm.factory.DAOFactory;
 import com.sm.factory.ServiceFacotry;
 import com.sm.thread.TimeThread;
@@ -71,7 +68,6 @@ public class AdminManiFrame extends JFrame {
     private JButton 批量导入Button;
     private ImgPanel infoPanel;
     private JLabel avatarLabel;
-    private JLabel 学号;
     private JLabel xuehaoLabel;
     private JLabel yuanxiLabel;
     private JLabel banjiLabel;
@@ -81,9 +77,11 @@ public class AdminManiFrame extends JFrame {
     private JTextField phoneTextField;
     private JPanel tablePanel;
     private JLabel brithLabel;
-    private JButton 编辑Button;
     private JButton 初始化数据Button;
+    private JButton 编辑Button;
     private String keywords;
+    private int row;
+
 
     public AdminManiFrame(Admin admin) {
         this.admin = admin;
@@ -120,7 +118,7 @@ public class AdminManiFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(centerPanel,"Card3");
-                infoPanel.setFileName("bg5_副本.png");
+                infoPanel.setFileName("a.png");
                 infoPanel.repaint();
                 List<StudentVO> studentVOList = ServiceFacotry.getStudnetServiceInstance().selectAll();
                 showStudentTable(studentVOList);
@@ -318,8 +316,7 @@ public class AdminManiFrame extends JFrame {
                     comboBox3.addItem(cClass);
                 }
                 //右侧个人信息显示去数据还原
-                //avatarLabel.setText("<html><img src ='https://student-manage-whl.oss-cn-beijing.aliyuncs.com/logo/1.jpg'/><html>");
-               // System.out.println("<html><img src ='\"https://student-manage-whl.oss-cn-beijing.aliyuncs.com/logo/avarat_%E5%89%AF%E6%9C%AC.jpg\"'/><html>");
+                avatarLabel.setText("<html><img src ='https://student-manage-whl.oss-cn-beijing.aliyuncs.com/logo/a.jpg'/><html>");
                 xuehaoLabel.setText("未选择");
                 yuanxiLabel.setText("未选择");
                 banjiLabel.setText("未选择");
@@ -506,18 +503,22 @@ public class AdminManiFrame extends JFrame {
         head.setPreferredSize(new Dimension(head.getWidth(),40));
         head.setFont(new Font("楷体",Font.PLAIN,22));
         table.setRowHeight(35);
-        table.setBackground(new Color(91,196,234));
+        table.setBackground(new Color(255,255,255));
         DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         r.setHorizontalAlignment(JLabel.CENTER);
         table.setDefaultRenderer(Object.class,r);
         JScrollPane scrollPane = new JScrollPane(table,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         tablePanel.add(scrollPane);
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem item = new JMenuItem("删除");
+        jPopupMenu.add(item);
+        table.add(jPopupMenu);
         //刷新数据
         tablePanel.revalidate();
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        table.addMouseListener(new MouseAdapter() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int row = table.getSelectedRow();
+            public void mouseClicked(MouseEvent e) {
+                row = table.getSelectedRow();
                 xuehaoLabel.setText(table.getValueAt(row,0).toString());
                 yuanxiLabel.setText(table.getValueAt(row,1).toString());
                 banjiLabel.setText(table.getValueAt(row,2).toString());
@@ -527,8 +528,55 @@ public class AdminManiFrame extends JFrame {
                 phoneTextField.setText(table.getValueAt(row,6).toString());
                 brithLabel.setText(table.getValueAt(row,7).toString());
                 avatarLabel.setText("<html><img src ='"+table.getValueAt(row,8).toString()+"'/><html>");
+                编辑Button.setVisible(true);
+                编辑Button.setText("编辑");
+                编辑Button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getActionCommand().equals("编辑")){
+                            addressTextField.setEditable(true);
+                            addressTextField.setEnabled(true);
+                            phoneTextField.setEditable(true);
+                            phoneTextField.setEnabled(true);
+                            编辑Button.setText("保存");
+                        }
+                        if (e.getActionCommand().equals("保存")) {
+                            Student student = new Student();
+                            student.setId(xuehaoLabel.getText());
+                            student.setAddress(addressTextField.getText());
+                            student.setPhone(phoneTextField.getText());
+                            int n = ServiceFacotry.getStudnetServiceInstance().updateStudent(student);
+                            if (n == 1) {
+                                model.setValueAt(addressTextField.getText(), row, 5);
+                                model.setValueAt(phoneTextField.getText(), row, 6);
+                                addressTextField.setEditable(false);
+                                addressTextField.setEnabled(false);
+                                phoneTextField.setEditable(false);
+                                phoneTextField.setEnabled(false);
+                                编辑Button.setText("编辑");
+                            }
+                        }
+                    }
+                });
+                if (e.getButton()==3){
+                    jPopupMenu.show(table,e.getX(),e.getY());
+                }
             }
         });
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                String id= (String) table.getValueAt(row,0);
+                int choice=JOptionPane.showConfirmDialog(tablePanel,"确定删除吗？");
+                if (choice==0){
+                    if (row!=-1){
+                        model.removeRow(row);
+                    }
+                    ServiceFacotry.getStudnetServiceInstance().deletById(id);
+            }
+            }
+        });
+
     }
     public static void main(String[] args) throws Exception {
         String lookAndFeel = UIManager.getSystemLookAndFeelClassName();

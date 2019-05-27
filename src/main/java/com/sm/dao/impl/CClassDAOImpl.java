@@ -12,6 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CClassDAOImpl implements CClassDAO {
+    /**
+     * 根据院系id查班级
+     * @param departmentId
+     * @return List<CClass>
+     * @throws SQLException
+     */
     @Override
     public List<CClass> selectByDepartmentId(int departmentId) throws SQLException {
         JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
@@ -27,6 +33,12 @@ public class CClassDAOImpl implements CClassDAO {
         return classList;
     }
 
+    /**
+     * 根据班级id删除班级
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     @Override
     public int deleteById(int id) throws SQLException {
         JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
@@ -55,6 +67,12 @@ public class CClassDAOImpl implements CClassDAO {
         return cClassList;
     }
 
+    /**
+     * 新增班级
+     * @param cClass
+     * @return int
+     * @throws SQLException
+     */
     @Override
     public int insertClass(CClass cClass) throws SQLException {
         JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
@@ -69,6 +87,11 @@ public class CClassDAOImpl implements CClassDAO {
         return n;
     }
 
+    /**
+     * 查询所有班级
+     * @return List<CClass>
+     * @throws SQLException
+     */
     @Override
     public List<CClass> selectAll() throws SQLException {
         JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();

@@ -13,6 +13,10 @@ import java.util.List;
 
 public class CClassDAOImplTest {
     private CClassDAO cClassDAO = DAOFactory.getCClassDAOInstance();
+
+    /**
+     * 根据院系id查询班级
+     */
     @Test
     public void selectByDepartmentId() {
         List<CClass> cClassList = null;
@@ -26,11 +30,17 @@ public class CClassDAOImplTest {
         cClassList.forEach(cClass -> System.out.println(cClass));
     }
 
+    /**
+     * 根据班级id删除班级
+     */
     @Test
     public void deleteById() {
 
     }
 
+    /**
+     * 新增班级
+     */
     @Test
     public void insertCClass() {
        CClass cClass = new CClass();
@@ -44,6 +54,9 @@ public class CClassDAOImplTest {
         }
     }
 
+    /**
+     * 查询所有班级
+     */
     @Test
     public void selectAll() {
         List<CClass> cClassList = null;

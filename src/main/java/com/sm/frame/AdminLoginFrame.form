@@ -35,6 +35,7 @@
         </constraints>
         <properties>
           <background color="-9833925"/>
+          <enabled value="true"/>
           <text value="登录"/>
         </properties>
       </component>
@@ -46,6 +47,10 @@
         </constraints>
         <properties>
           <background color="-871666"/>
+          <borderPainted value="true"/>
+          <contentAreaFilled value="false"/>
+          <defaultCapable value="false"/>
+          <enabled value="true"/>
           <text value="重置"/>
         </properties>
       </component>

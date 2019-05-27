@@ -12,7 +12,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentDAO departmentDAO = DAOFactory.getDepartmentDAOInstance();
     @Override
     public List<Department> selectAll() {
-
         List<Department> departmentList = null;
         try {
             departmentList = departmentDAO.getAll();

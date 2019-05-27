@@ -17,4 +17,9 @@ public class StudentServiceImplTest {
         List<StudentVO> studentVOList = studentService.selectAll();
         studentVOList.forEach(studentVO -> System.out.println(studentVOList));
     }
+
+    @Test
+    public void updateStudent() {
+
+    }
 }

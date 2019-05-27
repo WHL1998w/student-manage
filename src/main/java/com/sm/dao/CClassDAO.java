@@ -41,7 +41,7 @@ public interface CClassDAO {
     int insertClass(CClass cClass) throws SQLException;
 
     /**
-     * 查所有
+     * 查所有班级
      * @return
      * @throws SQLException
      */

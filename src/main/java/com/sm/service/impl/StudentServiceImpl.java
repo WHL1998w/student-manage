@@ -1,6 +1,7 @@
 package com.sm.service.impl;
 
 import com.sm.dao.StudnetDAO;
+import com.sm.entity.Student;
 import com.sm.entity.StudentVO;
 import com.sm.factory.DAOFactory;
 import com.sm.service.StudentService;
@@ -52,5 +53,27 @@ public class StudentServiceImpl implements StudentService {
             System.out.println("根据关键字查询错误");
         }
         return studentVOList;
+    }
+
+    @Override
+    public int updateStudent(Student student) {
+       int n = 0;
+        try {
+            n = studnetDAO.updateStudent(student);
+        } catch (SQLException e) {
+            System.out.println("更新学生信息错误");
+        }
+        return n;
+    }
+
+    @Override
+    public int deletById(String id) {
+        int n = 0;
+        try {
+           n= studnetDAO.deletById(id);
+        } catch (SQLException e) {
+            System.out.println("删除学生信息错误");
+        }
+        return n;
     }
 }

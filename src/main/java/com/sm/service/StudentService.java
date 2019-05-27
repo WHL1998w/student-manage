@@ -1,5 +1,6 @@
 package com.sm.service;
 
+import com.sm.entity.Student;
 import com.sm.entity.StudentVO;
 
 import java.util.List;
@@ -31,4 +32,18 @@ public interface StudentService {
      * @return
      */
     List<StudentVO> selectByKeywords(String keywords);
+
+    /**
+     * 更新学生信息
+     * @param student
+     * @return
+     */
+    int updateStudent(Student student);
+
+    /**
+     * 删除学生信息
+     * @param id
+     * @return
+     */
+    int deletById(String id);
 }

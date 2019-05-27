@@ -1,6 +1,7 @@
 package com.sm.dao.impl;
 
 import com.sm.dao.StudnetDAO;
+import com.sm.entity.Student;
 import com.sm.entity.StudentVO;
 import com.sm.utils.JDBCUtil;
 
@@ -132,13 +133,43 @@ public class StudentDAOImpl implements StudnetDAO {
         return n;
     }
 
+    /**
+     * 更新学生信息
+     * @param student
+     * @return
+     * @throws SQLException
+     */
     @Override
-    public int deletStudentById(String id) throws SQLException {
-        return 0;
+    public int updateStudent(Student student) throws SQLException {
+        JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "UPDATE t_student SET address = ?,phone = ? WHERE id = ?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1,student.getAddress());
+        pstmt.setString(2,student.getPhone());
+        pstmt.setString(3,student.getId());
+        int n = pstmt.executeUpdate();
+        pstmt.close();
+        connection.close();
+        return n;
+    }
+
+
+    @Override
+    public int deletById(String id) throws SQLException {
+        JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "DELETE FROM t_student WHERE id = ?";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setString(1,id);
+        int n = pstm.executeUpdate();
+        pstm.close();
+        connection.close();
+        return n;
     }
 
     /**
-     *
+     *分装
      * @param rs
      * @return
      * @throws SQLException

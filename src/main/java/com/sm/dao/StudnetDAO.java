@@ -1,5 +1,6 @@
 package com.sm.dao;
 
+import com.sm.entity.Student;
 import com.sm.entity.StudentVO;
 
 import java.sql.SQLException;
@@ -46,11 +47,20 @@ public interface StudnetDAO {
      */
     int insert(StudentVO studentVO) throws SQLException;
 
+
     /**
-     * 删除学生
-     * @param id
-     * @return String
+     * 更新学生信息
+     * @param student
+     * @return int
      * @throws SQLException
      */
-    int deletStudentById(String id) throws SQLException;
+    int updateStudent(Student student) throws SQLException;
+
+    /**
+     * 删除学生信息
+     * @param id
+     * @return int
+     * @throws SQLException
+     */
+    int deletById(String id)throws SQLException;
 }
