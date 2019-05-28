@@ -5,10 +5,7 @@ import com.sm.entity.Student;
 import com.sm.entity.StudentVO;
 import com.sm.utils.JDBCUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,21 +114,26 @@ public class StudentDAOImpl implements StudnetDAO {
         return studentVOList;
     }
 
-    //新增学生
     @Override
-    public int insert(StudentVO studentVO) throws SQLException {
+    public int insert(Student student) throws SQLException {
         JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
         Connection connection = jdbcUtil.getConnection();
-        String sql = "INSERT INTO t_student (id,student_name,gender,avatar,phone,address," +
-                "birthday,department_name,class_name) VALUES (?,?,?,?,?,?,?,?,?)";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1,studentVO.getId());
-        pstmt.setString(2,studentVO.getClassName());
-        int n = pstmt.executeUpdate();
-        pstmt.close();
+        String sql = "INSERT INTO t_student VALUES (?,?,?,?,?,?,?,?)";
+        PreparedStatement prstm = connection.prepareStatement(sql);
+        prstm.setString(1,student.getId());
+        prstm.setInt(2,student.getClassId());
+        prstm.setString(3,student.getStudentName());
+        prstm.setString(4,student.getAvatar());
+        prstm.setString(5,student.getGender());
+        prstm.setDate(6,new Date(student.getBirthday().getTime()));
+        prstm.setString(7,student.getAddress());
+        prstm.setString(8,student.getPhone());
+        int n = prstm.executeUpdate();
+        prstm.close();
         connection.close();
         return n;
     }
+
 
     /**
      * 更新学生信息
@@ -166,6 +168,44 @@ public class StudentDAOImpl implements StudnetDAO {
         pstm.close();
         connection.close();
         return n;
+    }
+
+    @Override
+    public int countByDepartmentId(int departmentId) throws SQLException {
+        JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql ="SELECT COUNT(*) FROM t_student t1 LEFT JOIN t_class t2 ON t1.class_id=t2.id\n" +
+                "LEFT JOIN t_department t3 ON t2.department_id =t3.id\n" +
+                "WHERE t3.id=?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1,departmentId);
+        ResultSet rs = pstmt.executeQuery();
+        int rowcount =0 ;
+        if (rs.next()){
+            rowcount = rs.getInt(1);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return rowcount;
+    }
+
+    @Override
+    public int countByClassId(int classId) throws SQLException {
+        JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "SELECT COUNT(*) FROM t_student WHERE class_id =?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1,classId);
+        ResultSet rs = pstmt.executeQuery();
+        int rowcount =0 ;
+        if (rs.next()){
+            rowcount = rs.getInt(1);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return rowcount;
     }
 
     /**

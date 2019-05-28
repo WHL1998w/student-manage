@@ -41,11 +41,11 @@ public interface StudnetDAO {
 
     /**
      * 新增学生
-     * @param studentVO
+     * @param student
      * @return int
      * @throws SQLException
      */
-    int insert(StudentVO studentVO) throws SQLException;
+    int insert(Student student) throws SQLException;
 
 
     /**
@@ -63,4 +63,21 @@ public interface StudnetDAO {
      * @throws SQLException
      */
     int deletById(String id)throws SQLException;
+
+
+    /**
+     * 根据院系id统计学生人数
+     * @param departmentId
+     * @return
+     * @throws SQLException
+     */
+    int countByDepartmentId(int departmentId)throws SQLException;
+
+    /**
+     * 根据班级id查询学生人数
+     * @param classId
+     * @return
+     * @throws SQLException
+     */
+    int countByClassId(int classId)throws SQLException;
 }

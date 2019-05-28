@@ -9,8 +9,6 @@ import com.sm.utils.AliOSSUtil;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -20,6 +18,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * wanghuanle
@@ -316,7 +315,7 @@ public class AdminManiFrame extends JFrame {
                     comboBox3.addItem(cClass);
                 }
                 //右侧个人信息显示去数据还原
-                avatarLabel.setText("<html><img src ='https://student-manage-whl.oss-cn-beijing.aliyuncs.com/logo/a.jpg'/><html>");
+                avatarLabel.setText("<html><img src ='https://student-manage-whl.oss-cn-beijing.aliyuncs.com/logo/a.jpg'g/><html>");
                 xuehaoLabel.setText("未选择");
                 yuanxiLabel.setText("未选择");
                 banjiLabel.setText("未选择");
@@ -337,13 +336,27 @@ public class AdminManiFrame extends JFrame {
                 }
             }
         });
+        新增学生Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AdminAddFrame(AdminManiFrame.this);
+                AdminManiFrame.this.setEnabled(false);
+            }
+        });
+        AdminManiFrame.this.setEnabled(true);
+        刷新数据Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showDepartments();
+            }
+        });
     }
 
     private void showDepartments(){
         //移除原有数据
         contentPanel.removeAll();
         //从service层获取到所有院系列表
-        List<Department> departmentList = ServiceFacotry.getDempartmentServiceInstance().selectAll();
+        List<Map> departmentList = ServiceFacotry.getDempartmentServiceInstance().selectDepartmentInfo();
         int len = departmentList.size();
         int row = len % 4 == 0 ? len / 4 : len / 4 + 1;
         GridLayout gridLayout = new GridLayout(0, 4, 20, 20);
@@ -351,9 +364,12 @@ public class AdminManiFrame extends JFrame {
         TimeThread timeThread = new TimeThread();
         timeThread.setTimeLabel(timeLabel);
         timeThread.start();
-        for (Department department : departmentList) {
+        for (Map map : departmentList) {
             //给每个院系对象创建一个面板
             JPanel depPanel = new JPanel();
+            Department department = (Department) map.get("department");
+            int classCount = (int) map.get("classCount");
+            int studentCount = (int )map.get("studentCount");
             depPanel.setBackground(new Color(240, 240, 240));
             depPanel.setLayout(null);
             depPanel.setPreferredSize(new Dimension(300, 350));
@@ -363,9 +379,10 @@ public class AdminManiFrame extends JFrame {
             JLabel logoLabel = new JLabel("<html><img src='" + department.getLogo() + "'/></html>");
             logoLabel.setBackground(new Color(255,255,255));
             logoLabel.setBounds(35,20,250,250);
+            JLabel infoLabel = new JLabel("班级" + classCount + "个，学生" + studentCount + "人");
             JButton delBtn=new JButton("删除");
             delBtn.setBackground(new Color(37,61,242));
-            Font font = new Font("微软雅黑",Font.BOLD,20);
+            Font font = new Font("微软雅黑",Font.PLAIN,20);
             delBtn.setFont(font);
             delBtn.addMouseListener(new MouseAdapter() {
                 @Override
@@ -380,8 +397,11 @@ public class AdminManiFrame extends JFrame {
                 }
             });
             delBtn.setBounds(120,280,100,40);
+            infoLabel.setBounds(70,340,250,40);
+            infoLabel.setFont(font);
             //图标标签加入院系面板
             depPanel.add(logoLabel);
+            depPanel.add(infoLabel);
             depPanel.add(delBtn);
             //院系面板加入主体内容面板
             contentPanel.add(depPanel);
@@ -405,20 +425,19 @@ public class AdminManiFrame extends JFrame {
         treePanel.removeAll();
         //左侧树形结构根节点
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("南工院");
-        //第一层循环遍历的到所有的院系名称
-        for (Department department:departmentList) {
+        for (Department department : departmentList) {
             DefaultMutableTreeNode group = new DefaultMutableTreeNode(department.getDepartmentName());
             top.add(group);
             List<CClass> cClassList = ServiceFacotry.getCClassServiceInstance().selectByDepartmentId(department.getId());
-            //第二层循环遍历得到相应院系的班级名称
-            for (CClass cClass:cClassList) {
-                DefaultMutableTreeNode node = new DefaultMutableTreeNode(cClass.getClassName());
+            for (CClass cClass : cClassList) {
+                int num = ServiceFacotry.getStudnetServiceInstance().countStudentByClassId(cClass.getId());
+                DefaultMutableTreeNode node = new DefaultMutableTreeNode(cClass.getClassName() + "（" + num + "人)");
                 group.add(node);
             }
         }
         final JTree tree = new JTree(top);
         tree.setRowHeight(30);
-        tree.setFont(new Font("微软雅黑",Font.PLAIN,20));
+        tree.setFont(new Font("微软雅黑", Font.PLAIN, 20));
         treePanel.add(tree);
         treePanel.revalidate();
     }
@@ -481,7 +500,7 @@ public class AdminManiFrame extends JFrame {
             jList.add(jPopupMenu);
         }
     }
-    private void showStudentTable(List<StudentVO> studentVOList){
+    public void showStudentTable(List<StudentVO> studentVOList){
         tablePanel.removeAll();
         JTable table = new JTable();
         DefaultTableModel model = new DefaultTableModel();

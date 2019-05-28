@@ -7,6 +7,7 @@ import com.sm.factory.DAOFactory;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -57,7 +58,18 @@ public class StudentDAOImplTest {
      * 新增学生
      */
     @Test
-    public void insert() {
+    public void insert() throws SQLException {
+        Student student = new Student();
+        student.setId("111");
+        student.setClassId(1);
+        student.setStudentName("曾月");
+        student.setAvatar("1.jpg");
+        student.setBirthday(new Date());
+        student.setGender("女");
+        student.setAddress("江苏南京");
+        student.setPhone("1880516278");
+        int n = studnetDAO.insert(student);
+        assertEquals(1,n);
     }
 
     /**
@@ -82,4 +94,5 @@ public class StudentDAOImplTest {
         int n = studnetDAO.deletById("1802343334");
         assertEquals(1,n);
     }
+
 }

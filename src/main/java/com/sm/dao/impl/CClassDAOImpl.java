@@ -106,6 +106,24 @@ public class CClassDAOImpl implements CClassDAO {
         return classList;
     }
 
+    @Override
+    public int countByDepartmentId(int departmentId) throws SQLException {
+        JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "SELECT COUNT(*) FROM t_class WHERE department_id =?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1,departmentId);
+        ResultSet rs = pstmt.executeQuery();
+        int rowcount =0 ;
+        if (rs.next()){
+            rowcount = rs.getInt(1);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return rowcount;
+    }
+
     /**
      * 封装方法
      * @param rs

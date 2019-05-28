@@ -76,4 +76,26 @@ public class StudentServiceImpl implements StudentService {
         }
         return n;
     }
+
+    @Override
+    public int insert(Student student) {
+        int n = 0;
+        try {
+            n = studnetDAO.insert(student);
+        } catch (SQLException e) {
+            System.out.println("新增学生错误");
+        }
+        return n;
+    }
+
+    @Override
+    public int countStudentByClassId(int classId) {
+        int n = 0;
+        try {
+            n= studnetDAO.countByClassId(classId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n;
+    }
 }

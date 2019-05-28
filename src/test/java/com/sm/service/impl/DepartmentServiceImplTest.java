@@ -5,6 +5,7 @@ import com.sm.factory.ServiceFacotry;
 import com.sm.service.DepartmentService;
 import org.junit.Test;
 import java.util.List;
+import java.util.Map;
 
 
 public class DepartmentServiceImplTest {
@@ -34,5 +35,14 @@ public class DepartmentServiceImplTest {
     @Test
     public void deleteDepartment() {
         departmentService.deleteDepartment(8);
+    }
+
+    @Test
+    public void selectDepartmentInfo() {
+        List<Map> mapList = departmentService.selectDepartmentInfo();
+        mapList.forEach(map -> {
+            System.out.println(map.get("department") + "," + map.get("classCount") + "个班，" + map.get("studentCount") + "个学生");
+
+        });
     }
 }

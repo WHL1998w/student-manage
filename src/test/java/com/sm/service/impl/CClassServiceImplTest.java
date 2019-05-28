@@ -6,6 +6,7 @@ import com.sm.service.CClassService;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -28,5 +29,14 @@ public class CClassServiceImplTest {
     public void selectAll() {
         List<CClass> cClassList = cClassService.selectAllClass();
         cClassList.forEach(cClass -> System.out.println(cClass));
+    }
+
+    @Test
+    public void selectClassInfo() {
+        List<Map> mapList = cClassService.selectClassInfo();
+        mapList.forEach(map -> {
+            System.out.println( map.get("cClass") + "，" + map.get("studentCount") + "个学生");
+
+        });
     }
 }

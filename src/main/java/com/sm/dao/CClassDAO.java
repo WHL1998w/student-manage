@@ -46,4 +46,6 @@ public interface CClassDAO {
      * @throws SQLException
      */
     List<CClass> selectAll() throws SQLException;
+
+    int countByDepartmentId(int departmentId)throws SQLException;
 }

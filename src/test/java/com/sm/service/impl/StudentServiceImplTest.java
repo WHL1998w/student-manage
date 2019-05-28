@@ -22,4 +22,9 @@ public class StudentServiceImplTest {
     public void updateStudent() {
 
     }
+
+    @Test
+    public void insert() {
+
+    }
 }

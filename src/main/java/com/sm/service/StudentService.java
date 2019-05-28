@@ -46,4 +46,8 @@ public interface StudentService {
      * @return
      */
     int deletById(String id);
+
+    int insert(Student student);
+
+     int countStudentByClassId(int classId);
 }
