@@ -47,7 +47,7 @@ public class AliOSSUtil {
     }
 
     public static void main(String[] args) {
-        File file = new File("D:/a.png");
+        File file = new File("D:/c.png");
         String url = ossUpload(file);
         System.out.println(url);
     }

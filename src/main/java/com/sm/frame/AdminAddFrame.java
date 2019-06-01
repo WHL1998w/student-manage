@@ -27,11 +27,11 @@ public class AdminAddFrame extends JFrame {
     private JTextField addressTextField;
     private JTextField phoneTextField;
     private JButton 新增Button;
-    private JLabel closeLabel;
     private JLabel avatarLabel;
     private AdminManiFrame adminManiFrame;
     private File file;
     private JComboBox<CClass> banJiComboBox1;
+    private JLabel closeLabel;
     private int classId;
     private String uploadFileUrl;
 
@@ -41,7 +41,7 @@ public class AdminAddFrame extends JFrame {
         rootPanel.setFileName("bgb.jpg");
         rootPanel.repaint();
         setTitle("新增学生");
-        setSize(640,1000);
+        setSize(770,750);
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,14 +53,6 @@ public class AdminAddFrame extends JFrame {
         for (CClass cClass :cClassList){
             banJiComboBox1.addItem(cClass);
         }
-
-        closeLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                AdminAddFrame.this.dispose();
-            }
-        });
-
 
         avatarLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -122,7 +114,12 @@ public class AdminAddFrame extends JFrame {
                     List<StudentVO> studentList = (List<StudentVO>) ServiceFacotry.getStudnetServiceInstance().selectAll();
                     adminManiFrame.showStudentTable(studentList);
                 }
-                adminManiFrame.setEnabled(true);
+            }
+        });
+        closeLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                AdminAddFrame.this.dispose();
             }
         });
     }

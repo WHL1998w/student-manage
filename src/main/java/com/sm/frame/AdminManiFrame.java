@@ -78,8 +78,21 @@ public class AdminManiFrame extends JFrame {
     private JLabel brithLabel;
     private JButton 初始化数据Button;
     private JButton 编辑Button;
+    private JPanel rTopPanel;
+    private JTextField textField3;
+    private JButton 查询Button;
+    private JPanel rightPanel;
+    private JPanel rCenterPanel;
+    private JTextArea jianglitextArea1;
+    private JButton 新增奖励Button;
+    private JTextArea chengfatextArea2;
+    private JButton 记录处罚Button;
+    private ImgPanel panel1;
+    private ImgPanel panel2;
     private String keywords;
     private int row;
+    private ImageIcon imageIcon;
+
 
 
     public AdminManiFrame(Admin admin) {
@@ -182,6 +195,14 @@ public class AdminManiFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(centerPanel,"Card4");
+                List<Rewards> rewardsList = ServiceFacotry.getRewardsServiceInstance().selectAll();
+                showRewards(rewardsList);
+                //设置背景图
+                panel1.setFileName("bgc1.png");
+                panel2.setFileName("bgc1.png");
+                //组件重绘
+                panel1.repaint();
+                panel2.repaint();
             }
         });
         新增院系Button.addActionListener(new ActionListener() {
@@ -340,14 +361,24 @@ public class AdminManiFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new AdminAddFrame(AdminManiFrame.this);
-                AdminManiFrame.this.setEnabled(false);
             }
         });
         AdminManiFrame.this.setEnabled(true);
+
         刷新数据Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showDepartments();
+            }
+        });
+        查询Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keywords = textField3.getText().trim();
+                List<Rewards> rewardsList = ServiceFacotry.getRewardsServiceInstance().selectByKeywords(keywords);
+                if (rewardsList != null){
+                    showRewards(rewardsList);
+                }
             }
         });
     }
@@ -357,8 +388,6 @@ public class AdminManiFrame extends JFrame {
         contentPanel.removeAll();
         //从service层获取到所有院系列表
         List<Map> departmentList = ServiceFacotry.getDempartmentServiceInstance().selectDepartmentInfo();
-        int len = departmentList.size();
-        int row = len % 4 == 0 ? len / 4 : len / 4 + 1;
         GridLayout gridLayout = new GridLayout(0, 4, 20, 20);
         contentPanel.setLayout(gridLayout);
         TimeThread timeThread = new TimeThread();
@@ -376,7 +405,7 @@ public class AdminManiFrame extends JFrame {
             //将院系名称设置给面板标题
             depPanel.setBorder(BorderFactory.createTitledBorder(department.getDepartmentName()));
             //新建一个Label用来放置院系logo，并指定大小
-            JLabel logoLabel = new JLabel("<html><img src='" + department.getLogo() + "'/></html>");
+            JLabel logoLabel = new JLabel("<html><img src='" + department.getLogo() +"'width=230 height=230 /></html>");
             logoLabel.setBackground(new Color(255,255,255));
             logoLabel.setBounds(35,20,250,250);
             JLabel infoLabel = new JLabel("班级" + classCount + "个，学生" + studentCount + "人");
@@ -502,30 +531,41 @@ public class AdminManiFrame extends JFrame {
     }
     public void showStudentTable(List<StudentVO> studentVOList){
         tablePanel.removeAll();
+        //创建表格对象
         JTable table = new JTable();
+        //表格数据模型
         DefaultTableModel model = new DefaultTableModel();
         table.setModel(model);
+        //表头内容
         model.setColumnIdentifiers(new String[]{"学号","院系","班级","姓名","性别","地址","手机号","出生日期","头像"});
+        //遍历list 转成object输出
         for (StudentVO student:studentVOList) {
             Object[] objects = new Object[]{student.getId(),student.getDepartmentName(),student.getClassName(),student.getStudentName(),
                     student.getGender(),student.getAddress(),student.getPhone(),student.getBirthday(),
                     student.getAvatar()};
             model.addRow(objects);
         }
+        //将最后一列隐藏头像地址不显示在表格中
         TableColumn tc = table.getColumnModel().getColumn(8);
         tc.setMinWidth(0);
         tc.setMaxWidth(0);
+        //获得表头
         JTableHeader head = table.getTableHeader();
+        //表头居中
         DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
         head.setDefaultRenderer(hr);
+        //设置表头大小
         head.setPreferredSize(new Dimension(head.getWidth(),40));
+        //设置表头字体
         head.setFont(new Font("楷体",Font.PLAIN,22));
         table.setRowHeight(35);
         table.setBackground(new Color(255,255,255));
+        //表格内容居中
         DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         r.setHorizontalAlignment(JLabel.CENTER);
         table.setDefaultRenderer(Object.class,r);
+        //表格加入滚动面板
         JScrollPane scrollPane = new JScrollPane(table,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         tablePanel.add(scrollPane);
         JPopupMenu jPopupMenu = new JPopupMenu();
@@ -534,6 +574,7 @@ public class AdminManiFrame extends JFrame {
         table.add(jPopupMenu);
         //刷新数据
         tablePanel.revalidate();
+        //点击一行在右边显示学生信息
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -546,7 +587,7 @@ public class AdminManiFrame extends JFrame {
                 addressTextField.setText(table.getValueAt(row,5).toString());
                 phoneTextField.setText(table.getValueAt(row,6).toString());
                 brithLabel.setText(table.getValueAt(row,7).toString());
-                avatarLabel.setText("<html><img src ='"+table.getValueAt(row,8).toString()+"'/><html>");
+                avatarLabel.setText("<html><img src ='"+table.getValueAt(row,8).toString()+"'width=230 height=230/><html>");
                 编辑Button.setVisible(true);
                 编辑Button.setText("编辑");
                 编辑Button.addActionListener(new ActionListener() {
@@ -587,15 +628,61 @@ public class AdminManiFrame extends JFrame {
             public void actionPerformed (ActionEvent e) {
                 String id= (String) table.getValueAt(row,0);
                 int choice=JOptionPane.showConfirmDialog(tablePanel,"确定删除吗？");
-                if (choice==0){
-                    if (row!=-1){
+                if (choice==0) {
+                    if (row != -1) {
                         model.removeRow(row);
                     }
                     ServiceFacotry.getStudnetServiceInstance().deletById(id);
-            }
+                }
             }
         });
 
+    }
+    public void showRewards(List<Rewards> rewardsList){
+        rCenterPanel.removeAll();
+        //创建表格对象
+        JTable table = new JTable();
+        //表格数据模型
+        DefaultTableModel model = new DefaultTableModel();
+        table.setModel(model);
+        //表头内容
+        model.setColumnIdentifiers(new String[]{"学号","姓名","院系","班级","奖励情况","惩处情况"});
+        //遍历list 转成object输出
+        for (Rewards rewards:rewardsList) {
+            Object[] objects = new Object[]{rewards.getStudentId(),rewards.getStudentName(),rewards.getDepartmentName(),rewards.getClassName(),
+                    rewards.getAward(),rewards.getPunishment()};
+            model.addRow(objects);
+        }
+        //获得表头
+        JTableHeader head = table.getTableHeader();
+        //表头居中
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        head.setDefaultRenderer(hr);
+        //设置表头大小
+        head.setPreferredSize(new Dimension(head.getWidth(),40));
+        //设置表头字体
+        head.setFont(new Font("楷体",Font.PLAIN,22));
+        table.setRowHeight(35);
+        table.setBackground(new Color(161, 250, 220));
+        //表格内容居中
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        table.setDefaultRenderer(Object.class,r);
+        //表格加入滚动面板
+        JScrollPane scrollPane = new JScrollPane(table,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        rCenterPanel.add(scrollPane);
+        //刷新数据
+        rCenterPanel.revalidate();
+        //点击哪一行中的哪一列就显示在右边
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                row = table.getSelectedRow();
+                jianglitextArea1.setText(table.getValueAt(row,4).toString());
+                chengfatextArea2.setText(table.getValueAt(row,5).toString());
+            }
+        });
     }
     public static void main(String[] args) throws Exception {
         String lookAndFeel = UIManager.getSystemLookAndFeelClassName();
