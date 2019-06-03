@@ -19,4 +19,11 @@ public interface RewardsService {
      */
     List<Rewards> selectByKeywords(String keywords);
 
+    /**
+     * 修改学生奖惩情况
+     * @param rewards
+     * @return int
+     */
+    int updateRewards(Rewards rewards);
+
 }

@@ -34,4 +34,19 @@ public class RewardsDAOImplTest {
         }
         rewardsList.forEach(rewards -> System.out.println(rewards));
     }
+
+    @Test
+    public void updateRewards() {
+        Rewards rewards = new Rewards();
+        rewards.setAward("校级舞蹈大赛一等奖");
+        rewards.setPunishment("无");
+        rewards.setStudentId("1802343301");
+        int n = 0;
+        try {
+            n = rewardsDAO.updateRewards(rewards);
+        } catch (SQLException e) {
+            System.out.println("修改奖惩情况失败");
+        }
+        assertEquals(1,n);
+    }
 }

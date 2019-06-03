@@ -89,6 +89,8 @@ public class AdminManiFrame extends JFrame {
     private JButton 记录处罚Button;
     private ImgPanel panel1;
     private ImgPanel panel2;
+    private JLabel studentIdLabel;
+    private JButton 初始数据Button;
     private String keywords;
     private int row;
     private ImageIcon imageIcon;
@@ -588,8 +590,15 @@ public class AdminManiFrame extends JFrame {
                 phoneTextField.setText(table.getValueAt(row,6).toString());
                 brithLabel.setText(table.getValueAt(row,7).toString());
                 avatarLabel.setText("<html><img src ='"+table.getValueAt(row,8).toString()+"'width=230 height=230/><html>");
+                //显示电话和地址的文本框处于不可编辑状态
+                addressTextField.setEditable(false);
+                addressTextField.setEnabled(false);
+                phoneTextField.setEditable(false);
+                phoneTextField.setEnabled(false);
+                //编辑按钮在获得学生信息后可见
                 编辑Button.setVisible(true);
                 编辑Button.setText("编辑");
+                //编辑按钮的监听事件
                 编辑Button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -636,7 +645,6 @@ public class AdminManiFrame extends JFrame {
                 }
             }
         });
-
     }
     public void showRewards(List<Rewards> rewardsList){
         rCenterPanel.removeAll();
@@ -674,13 +682,72 @@ public class AdminManiFrame extends JFrame {
         rCenterPanel.add(scrollPane);
         //刷新数据
         rCenterPanel.revalidate();
-        //点击哪一行中的哪一列就显示在右边
+        //点击哪一行中的哪一列就显示在右边,并且此时文本域是不可编辑状态
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 row = table.getSelectedRow();
+                studentIdLabel.setText(table.getValueAt(row,0).toString());
                 jianglitextArea1.setText(table.getValueAt(row,4).toString());
                 chengfatextArea2.setText(table.getValueAt(row,5).toString());
+                jianglitextArea1.setEditable(false);
+                jianglitextArea1.setEnabled(false);
+                chengfatextArea2.setEditable(false);
+                chengfatextArea2.setEnabled(false);
+                新增奖励Button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getActionCommand().equals("新增奖励")){
+                            jianglitextArea1.setEditable(true);
+                            jianglitextArea1.setEnabled(true);
+                            新增奖励Button.setText("保存");
+                        }
+                        if (e.getActionCommand().equals("保存")) {
+                            Rewards rewards = new Rewards();
+                            rewards.setStudentId(studentIdLabel.getText());
+                            rewards.setAward(jianglitextArea1.getText());
+                            rewards.setPunishment(chengfatextArea2.getText());
+                            int n = ServiceFacotry.getRewardsServiceInstance().updateRewards(rewards);
+                            if (n == 1) {
+                                model.setValueAt(jianglitextArea1.getText(), row, 4);
+                                model.setValueAt(chengfatextArea2.getText(),row,5);
+                                jianglitextArea1.setText("");
+                                chengfatextArea2.setText("");
+                                studentIdLabel.setText("");
+                                jianglitextArea1.setEditable(false);
+                                jianglitextArea1.setEnabled(false);
+                                新增奖励Button.setText("新增奖励");
+                            }
+                        }
+                    }
+                });
+                记录处罚Button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getActionCommand().equals("记录处罚")){
+                            chengfatextArea2.setEditable(true);
+                            chengfatextArea2.setEnabled(true);
+                            记录处罚Button.setText("保存");
+                        }
+                        if (e.getActionCommand().equals("保存")) {
+                            Rewards rewards = new Rewards();
+                            rewards.setStudentId(studentIdLabel.getText());
+                            rewards.setAward(jianglitextArea1.getText());
+                            rewards.setPunishment(chengfatextArea2.getText());
+                            int n = ServiceFacotry.getRewardsServiceInstance().updateRewards(rewards);
+                            if (n == 1) {
+                                model.setValueAt(chengfatextArea2.getText(), row, 5);
+                                model.setValueAt(jianglitextArea1.getText(),row,4);
+                                jianglitextArea1.setText("");
+                                chengfatextArea2.setText("");
+                                studentIdLabel.setText("");
+                                chengfatextArea2.setEditable(false);
+                                chengfatextArea2.setEnabled(false);
+                                记录处罚Button.setText("记录处罚");
+                            }
+                        }
+                    }
+                });
             }
         });
     }

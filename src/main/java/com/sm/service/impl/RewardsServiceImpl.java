@@ -41,4 +41,20 @@ public class RewardsServiceImpl implements RewardsService {
         }
         return rewardsList;
     }
+
+    /**
+     * 修改学生奖惩情况错误
+     * @param rewards
+     * @return int
+     */
+    @Override
+    public int updateRewards(Rewards rewards) {
+        int n = 0;
+        try {
+            n = rewardsDAO.updateRewards(rewards);
+        } catch (SQLException e) {
+            System.out.println("修改学生奖惩情况错误");
+        }
+        return n;
+    }
 }

@@ -67,6 +67,27 @@ public class RewardsDAOImpl implements RewardsDAO {
     }
 
     /**
+     * 修改学生奖惩情况
+     * @param rewards
+     * @return int
+     * @throws SQLException
+     */
+    @Override
+    public int updateRewards(Rewards rewards) throws SQLException {
+        JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "UPDATE t_rewards SET award = ?,punishment = ? WHERE student_id = ?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1,rewards.getAward());
+        pstmt.setString(2,rewards.getPunishment());
+        pstmt.setString(3,rewards.getStudentId());
+        int n = pstmt.executeUpdate();
+        pstmt.close();
+        connection.close();
+        return n;
+    }
+
+    /**
      * 分装方法
      * @param rs
      * @return

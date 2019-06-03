@@ -20,4 +20,12 @@ public interface RewardsDAO {
      * @throws SQLException
      */
     List<Rewards> selectByKeywords(String keywords) throws SQLException;
+
+    /**
+     * 修改学生奖惩情况
+     * @param rewards
+     * @return int
+     * @throws SQLException
+     */
+    int updateRewards(Rewards rewards) throws SQLException;
 }
