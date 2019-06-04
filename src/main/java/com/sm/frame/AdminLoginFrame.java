@@ -39,7 +39,7 @@ public class AdminLoginFrame extends JFrame {
                 JOptionPane.showMessageDialog(rootPanel, resultEntity.getMessage());
                 //登录成功，进入主界面，并关闭登录界面
                 if (resultEntity.getCode() == 0) {
-                    new AdminManiFrame((Admin) resultEntity.getData());
+                    new AdminMainFrame((Admin) resultEntity.getData());
                     AdminLoginFrame.this.dispose();
 
                 } else if (resultEntity.getCode() == 1) {  //密码错误，清空密码框

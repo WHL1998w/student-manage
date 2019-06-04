@@ -7,7 +7,6 @@ import com.sm.entity.StudentVO;
 import com.sm.factory.ServiceFacotry;
 import com.sm.ui.ImgPanel;
 import com.sm.utils.AliOSSUtil;
-import javafx.scene.control.ComboBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,14 +27,14 @@ public class AdminAddFrame extends JFrame {
     private JTextField phoneTextField;
     private JButton 新增Button;
     private JLabel avatarLabel;
-    private AdminManiFrame adminManiFrame;
+    private AdminMainFrame adminManiFrame;
     private File file;
     private JComboBox<CClass> banJiComboBox1;
     private JLabel closeLabel;
     private int classId;
     private String uploadFileUrl;
 
-    public AdminAddFrame(AdminManiFrame adminManiFrame){
+    public AdminAddFrame(AdminMainFrame adminManiFrame){
         this.adminManiFrame = adminManiFrame;
         setContentPane(rootPanel);
         rootPanel.setFileName("bgb.jpg");
@@ -99,7 +98,8 @@ public class AdminAddFrame extends JFrame {
                 if (女RadioButton.isSelected()){
                     gender = "女";
                 }
-                Student student = new Student();student.setId(studentIdTextField.getText());
+                Student student = new Student();
+                student.setId(studentIdTextField.getText());
                 student.setClassId(classId);
                 student.setStudentName(studentNameTextField.getText());
                 student.setAvatar(AliOSSUtil.ossUpload(file));

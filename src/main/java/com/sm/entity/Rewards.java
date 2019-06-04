@@ -1,13 +1,25 @@
 package com.sm.entity;
 
-public class Rewards {
-    private String studentId;
-    private String studentName;
-    private String departmentName;
-    private String className;
-    private String award;
-    private String punishment;
+import java.util.Date;
 
+public class Rewards {
+    private Integer id;
+   private String studentId;
+   private String studentName;
+   private String gender;
+   private String departmentName;
+   private String className;
+   private String kind;
+   private String awardPunishment;
+   private Date tDate;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getStudentId() {
         return studentId;
@@ -23,6 +35,14 @@ public class Rewards {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getDepartmentName() {
@@ -41,31 +61,42 @@ public class Rewards {
         this.className = className;
     }
 
-    public String getAward() {
-        return award;
+    public String getKind() {
+        return kind;
     }
 
-    public void setAward(String award) {
-        this.award = award;
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
-    public String getPunishment() {
-        return punishment;
+    public String getAwardPunishment() {
+        return awardPunishment;
     }
 
-    public void setPunishment(String punishment) {
-        this.punishment = punishment;
+    public void setAwardPunishment(String awardPunishment) {
+        this.awardPunishment = awardPunishment;
+    }
+
+    public Date gettDate() {
+        return tDate;
+    }
+
+    public void settDate(Date tDate) {
+        this.tDate = tDate;
     }
 
     @Override
     public String toString() {
         return "Rewards{" +
-                "studentId='" + studentId + '\'' +
+                "id=" + id +
+                ", studentId='" + studentId + '\'' +
                 ", studentName='" + studentName + '\'' +
+                ", gender='" + gender + '\'' +
                 ", departmentName='" + departmentName + '\'' +
                 ", className='" + className + '\'' +
-                ", award='" + award + '\'' +
-                ", punishment='" + punishment + '\'' +
+                ", kind='" + kind + '\'' +
+                ", awardPunishment='" + awardPunishment + '\'' +
+                ", tDate=" + tDate +
                 '}';
     }
 }

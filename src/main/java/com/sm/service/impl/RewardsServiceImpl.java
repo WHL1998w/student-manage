@@ -57,4 +57,20 @@ public class RewardsServiceImpl implements RewardsService {
         }
         return n;
     }
+
+    /**
+     * 新增学生奖惩情况
+     * @param rewards
+     * @return
+     */
+    @Override
+    public int insert(Rewards rewards) {
+        int n = 0;
+        try {
+            n = rewardsDAO.insert(rewards);
+        } catch (SQLException e) {
+            System.out.println("新增学生奖惩情况错误");
+        }
+        return n;
+    }
 }

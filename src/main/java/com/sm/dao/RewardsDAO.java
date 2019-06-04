@@ -1,6 +1,7 @@
 package com.sm.dao;
 
 import com.sm.entity.Rewards;
+import com.sm.entity.Student;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,4 +29,12 @@ public interface RewardsDAO {
      * @throws SQLException
      */
     int updateRewards(Rewards rewards) throws SQLException;
+
+    /**
+     * 新增学生奖惩情况
+     * @param rewards
+     * @return Int
+     * @throws SQLException
+     */
+    int insert(Rewards rewards) throws SQLException;
 }

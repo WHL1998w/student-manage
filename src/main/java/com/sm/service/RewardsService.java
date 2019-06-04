@@ -26,4 +26,11 @@ public interface RewardsService {
      */
     int updateRewards(Rewards rewards);
 
+    /**
+     * 新增学生信息
+     * @param rewards
+     * @return
+     */
+    int insert(Rewards rewards);
+
 }
