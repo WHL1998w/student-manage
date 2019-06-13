@@ -74,10 +74,18 @@ public interface StudnetDAO {
     int countByDepartmentId(int departmentId)throws SQLException;
 
     /**
-     * 根据班级id查询学生人数
+     * 根据班级统计学生人数
      * @param classId
      * @return
      * @throws SQLException
      */
     int countByClassId(int classId)throws SQLException;
+
+    /**
+     * 根据老师账号查找学生
+     * @param account
+     * @return
+     * @throws SQLException
+     */
+    List<StudentVO> selectAdminAccount(String account) throws SQLException;
 }

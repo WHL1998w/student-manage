@@ -19,4 +19,11 @@ public class ServiceFacotry {
     public static RewardsService getRewardsServiceInstance(){
         return new RewardsServiceImpl();
     }
+    public static TeacherLoginService getTeacherServiceInstance(){
+        return new TearcherLoginServiceImpl();
+    }
+
+    public static StudentLoginService getStudentLoginServiceInstance(){
+        return new StudentloginServiceImpl();
+    }
 }

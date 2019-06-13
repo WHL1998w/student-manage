@@ -98,4 +98,15 @@ public class StudentServiceImpl implements StudentService {
         }
         return n;
     }
+
+    @Override
+    public List<StudentVO> selectAdminAccount(String account) {
+        List<StudentVO> studentVOList = null;
+        try {
+            studentVOList = studnetDAO.selectAdminAccount(account);
+        } catch (SQLException e) {
+            System.out.println("根据老师账号查询错误");
+        }
+        return studentVOList;
+    }
 }

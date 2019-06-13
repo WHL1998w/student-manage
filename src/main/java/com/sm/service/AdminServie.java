@@ -6,10 +6,11 @@ import com.sm.utils.ResultEntity;
  */
 public interface AdminServie {
     /**
-     * 管理员登录
+     * 登录界面
+     * @param
      * @param account
      * @param password
-     * @return ResultEntity
+     * @return
      */
     ResultEntity adminLogin(String account, String password);
 

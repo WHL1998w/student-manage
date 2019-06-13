@@ -27,4 +27,9 @@ public class StudentServiceImplTest {
     public void insert() {
 
     }
+
+    @Test
+    public void selectAdminAccount() {
+
+    }
 }

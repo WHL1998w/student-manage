@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 
 
 public class CClassDAOImplTest {
@@ -36,6 +37,13 @@ public class CClassDAOImplTest {
     @Test
     public void deleteById() {
 
+        int n = 0;
+        try {
+            n = cClassDAO.deleteById(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        assertEquals(1,n);
     }
 
     /**

@@ -12,7 +12,7 @@ public class AdminServiceImplTest {
 
     @Test
     public void adminLogin() {
-        ResultEntity resultEntity = adminServie.adminLogin("aaa@qq.com","123456");
+        ResultEntity resultEntity = adminServie.adminLogin("aaa@qq.com","aaa");
         System.out.println(resultEntity);
     }
 }

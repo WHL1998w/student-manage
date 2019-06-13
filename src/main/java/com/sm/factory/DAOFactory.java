@@ -19,4 +19,8 @@ public class DAOFactory {
     public static RewardsDAO getRewardsDAOInstance(){
         return new RewardsDAOImpl();
     }
+    public static TeacherLoginDAO getTeacherLoginDAOInstance(){return new TeacherLoginDAOImpl();}
+    public static StudentLoginDAO getStudnetLoginDAOInstance(){
+        return new StudentLoginDAOImpl();
+    }
 }

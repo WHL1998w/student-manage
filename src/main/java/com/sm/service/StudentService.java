@@ -50,4 +50,6 @@ public interface StudentService {
     int insert(Student student);
 
      int countStudentByClassId(int classId);
+
+     List<StudentVO>selectAdminAccount(String account);
 }

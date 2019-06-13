@@ -1,11 +1,13 @@
 package com.sm.dao.impl;
 
 import com.sm.dao.StudnetDAO;
+import com.sm.entity.CClass;
 import com.sm.entity.Student;
 import com.sm.entity.StudentVO;
 import com.sm.factory.DAOFactory;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +37,13 @@ public class StudentDAOImplTest {
      */
     @Test
     public void selectByDepartmentId() {
+        List<StudentVO> studentVOList = null;
+        try {
+            studentVOList = studnetDAO.selectByDepartmentId(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        studentVOList.forEach(studentVO -> System.out.println(studentVO));
 
     }
 
@@ -43,6 +52,13 @@ public class StudentDAOImplTest {
      */
     @Test
     public void selectByCClassId() {
+        List<StudentVO> studentVOList = null;
+        try {
+            studentVOList = studnetDAO.selectByCClassId(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        studentVOList.forEach(studentVO -> System.out.println(studentVO));
 
     }
 
@@ -51,6 +67,13 @@ public class StudentDAOImplTest {
      */
     @Test
     public void selectByKeywords() {
+        List<StudentVO> studentVOList = null;
+        try {
+            studentVOList = studnetDAO.selectByKeywords("江");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        studentVOList.forEach(studentVO -> System.out.println(studentVO));
 
     }
 
@@ -72,12 +95,6 @@ public class StudentDAOImplTest {
         assertEquals(1,n);
     }
 
-    /**
-     * 根据学生id删除学生
-     */
-    @Test
-    public void deletStudentById() {
-    }
 
     @Test
     public void updateStudent() throws SQLException {
@@ -95,4 +112,14 @@ public class StudentDAOImplTest {
         assertEquals(1,n);
     }
 
+    @Test
+    public void selectAdminAccount() {
+        List<StudentVO> studentVOList = null;
+        try {
+            studentVOList = studnetDAO.selectAdminAccount("13919532645");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        studentVOList.forEach(studentVO -> System.out.println(studentVO));
+    }
 }

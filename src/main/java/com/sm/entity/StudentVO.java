@@ -12,6 +12,7 @@ public class StudentVO {
     private String address;
     private String avatar;
     private String phone;
+    private String adminAccount;
 
 
     public String getId() {
@@ -86,8 +87,27 @@ public class StudentVO {
         this.phone = phone;
     }
 
+    public String getAdminAccount() {
+        return adminAccount;
+    }
+
+    public void setAdminAccount(String adminAccount) {
+        this.adminAccount = adminAccount;
+    }
+
     @Override
     public String toString() {
-        return id + "-" + studentName;
+        return "StudentVO{" +
+                "id='" + id + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                ", className='" + className + '\'' +
+                ", studentName='" + studentName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birthday=" + birthday +
+                ", address='" + address + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", phone='" + phone + '\'' +
+                ", adminAccount='" + adminAccount + '\'' +
+                '}';
     }
 }

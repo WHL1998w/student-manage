@@ -209,6 +209,33 @@ public class StudentDAOImpl implements StudnetDAO {
     }
 
     /**
+     * 根据老师的账号查对应的学生
+     * @param account
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public List<StudentVO> selectAdminAccount(String account) throws SQLException {
+        JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "SELECT t1.*,t2.class_name,t3.department_name\n" +
+                "FROM t_student t1\n" +
+                "LEFT JOIN t_class t2\n" +
+                "ON t1.class_id=t2.id\n" +
+                "LEFT JOIN t_department t3\n" +
+                "ON t2.department_id=t3.id\n"+
+                "WHERE t1.admin_account = ?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1,account);
+        ResultSet rs = pstmt.executeQuery();
+        List<StudentVO> studentVOList = convert(rs);
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return studentVOList;
+    }
+
+    /**
      *分装
      * @param rs
      * @return
@@ -227,6 +254,7 @@ public class StudentDAOImpl implements StudnetDAO {
             studentVO.setBirthday(rs.getDate("birthday"));
             studentVO.setAddress(rs.getString("address"));
             studentVO.setPhone(rs.getString("phone"));
+            studentVO.setAdminAccount(rs.getString("admin_account"));
             studentVOList.add(studentVO);
         }
         return studentVOList;

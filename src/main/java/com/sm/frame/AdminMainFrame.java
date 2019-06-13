@@ -103,7 +103,7 @@ public class AdminMainFrame extends JFrame {
         this.admin = admin;
         adminNameLabel.setText("管理员：" + admin.getAdminName());
         showDepartments();
-        setTitle("管理员主界面");
+        setTitle("教务管理员主界面");
         //设置背景图
         rootPanel.setFileName("bg1.jpg");
         //组件重绘
