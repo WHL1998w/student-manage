@@ -26,15 +26,6 @@ public class DepartmentServiceImplTest {
 
     @Test
     public void addDepartment() {
-
-    }
-    /**
-     * 删除院系
-     */
-
-    @Test
-    public void deleteDepartment() {
-        departmentService.deleteDepartment(8);
     }
 
     @Test
@@ -44,5 +35,17 @@ public class DepartmentServiceImplTest {
             System.out.println(map.get("department") + "," + map.get("classCount") + "个班，" + map.get("studentCount") + "个学生");
 
         });
+    }
+
+    /**
+     * 修改院系
+     */
+    @Test
+    public void updateDepartment() {
+
+    }
+
+    @Test
+    public void selectDepartmentById() {
     }
 }

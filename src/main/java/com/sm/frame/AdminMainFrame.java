@@ -17,6 +17,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -86,16 +87,41 @@ public class AdminMainFrame extends JFrame {
     private JTextArea jianglitextArea1;
     private JButton 修改奖惩Button;
     private ImgPanel panel1;
-    private JLabel studentIdLabel;
     private JLabel tLabel;
     private JButton 新增奖惩Button;
     private JTextField timeTextField;
     private JLabel idLabel;
     private JTextField kindTextField;
+    private JButton 课程管理Button;
+    private JPanel coursePanel;
+    private JPanel cTopPanel;
+    private JTextField courseTextField;
+    private JButton findCourseButton;
+    private JPanel courseRrightPanel;
+    private JPanel courseCenterPanel;
+    private JLabel classNameLabel;
+    private JTextField grade;
+    private JComboBox<StudentVO> studentNameComboBox;
+    private JButton updateButton;
+    private JButton addButton;
+    private JTextField gradetextField;
+    private JLabel departmentLabel;
+    private JLabel classLabel;
+    private JLabel studentIdLabel;
+    private JLabel studentName;
+    private JLabel courseName;
+    private JLabel teacherName;
+    private JButton detailsButton;
+    private JTextArea destextArea;
+    private JComboBox<Course> courseComboBox;
     private JButton 初始数据Button;
     private String keywords;
     private int row;
     private ImageIcon imageIcon;
+    private int id;
+    private String studentId;
+    private String courseNumber;
+    private JTextField idTextField;
 
 
 
@@ -218,7 +244,6 @@ public class AdminMainFrame extends JFrame {
                 }
             }
         });
-
         选择Logo图Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -248,6 +273,7 @@ public class AdminMainFrame extends JFrame {
                 //创建Department对象，并设置相应属性
                 Department department = new Department();
                 department.setDepartmentName(depNameField.getText().trim());
+                department.setDescription(destextArea.getText());
                 department.setLogo(uploadFileUrl);
                 //调用service实现新增功能
                 int n = ServiceFacotry.getDempartmentServiceInstance().addDepartment(department);
@@ -383,14 +409,43 @@ public class AdminMainFrame extends JFrame {
                 }
             }
         });
+        findCourseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keywords = courseTextField.getText().trim();
+                List<Course> courseList = ServiceFacotry.getCourseServiceInstance().selectByKeywords(keywords);
+                if (courseList != null){
+                    showCourse(courseList);
+                }
+            }
+        });
         新增奖惩Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new AdminRewardsFrame(AdminMainFrame.this);
             }
         });
+        课程管理Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(centerPanel,"Card5");
+                List<Course> courseList = ServiceFacotry.getCourseServiceInstance().selectAll();
+                showCourse(courseList);
+            }
+        });
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new GradeFrame(AdminMainFrame.this);
+            }
+        });
+        detailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ProfessionFrame(AdminMainFrame.this);
+            }
+        });
     }
-
     private void showDepartments(){
         //移除原有数据
         contentPanel.removeAll();
@@ -417,29 +472,12 @@ public class AdminMainFrame extends JFrame {
             logoLabel.setBackground(new Color(255,255,255));
             logoLabel.setBounds(35,20,250,250);
             JLabel infoLabel = new JLabel("班级" + classCount + "个，学生" + studentCount + "人");
-            JButton delBtn=new JButton("删除");
-            delBtn.setBackground(new Color(37,61,242));
             Font font = new Font("微软雅黑",Font.PLAIN,20);
-            delBtn.setFont(font);
-            delBtn.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked (MouseEvent e) {
-                    int n=JOptionPane.showConfirmDialog(null,"确定要删除这行数据吗？","删除警告",
-                            JOptionPane.YES_OPTION);
-                    if (n==JOptionPane.YES_OPTION) {
-                        contentPanel.remove(depPanel);
-                        contentPanel.repaint();
-                        ServiceFacotry.getDempartmentServiceInstance().deleteDepartment(department.getId());
-                    }
-                }
-            });
-            delBtn.setBounds(120,280,100,40);
             infoLabel.setBounds(70,340,250,40);
             infoLabel.setFont(font);
             //图标标签加入院系面板
             depPanel.add(logoLabel);
             depPanel.add(infoLabel);
-            depPanel.add(delBtn);
             //院系面板加入主体内容面板
             contentPanel.add(depPanel);
             //刷新主体内容面板
@@ -735,6 +773,90 @@ public class AdminMainFrame extends JFrame {
                 });
             }
         });
+    }
+    public void showCourse(List<Course> courseList){
+            courseCenterPanel.removeAll();
+            JTable table = new JTable();
+            DefaultTableModel model = new DefaultTableModel();
+            table.setModel(model);
+            model.setColumnIdentifiers(new String[]{"编号","院系","班级","学号","姓名","科目","成绩","授课教师","其他课程"});
+            for (Course course:courseList) {
+                Object[] objects = new Object[]{course.getId(),course.getDepartmentName(),course.getClassName(),course.getStudentId(),
+                        course.getStudentName(),course.getCourseName(),course.getGrade(),course.getTeacherName(),
+                        course.getOtherCourse()};
+                model.addRow(objects);
+            }
+            JTableHeader head = table.getTableHeader();
+            DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+            hr.setHorizontalAlignment(JLabel.CENTER);
+            head.setDefaultRenderer(hr);
+            head.setPreferredSize(new Dimension(head.getWidth(),40));
+            head.setFont(new Font("楷体",Font.PLAIN,22));
+            table.setRowHeight(35);
+            table.setBackground(new Color(161, 250, 220));
+            DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+            r.setHorizontalAlignment(JLabel.CENTER);
+            table.setDefaultRenderer(Object.class,r);
+            JScrollPane scrollPane = new JScrollPane(table,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+            courseCenterPanel.add(scrollPane);
+            courseCenterPanel.revalidate();
+            table.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    row = table.getSelectedRow();
+                    departmentLabel.setText(table.getValueAt(row,1).toString());
+                    classLabel.setText(table.getValueAt(row,2).toString());
+                    studentIdLabel.setText(table.getValueAt(row,3).toString());
+                    studentName.setText(table.getValueAt(row,4).toString());
+                    courseName.setText(table.getValueAt(row,5).toString());
+                    grade.setText(table.getValueAt(row,6).toString());
+                    teacherName.setText(table.getValueAt(row,7).toString());
+                    grade.setEditable(false);
+                    grade.setEnabled(false);
+                    courseRrightPanel.setVisible(true);
+                    updateButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (e.getActionCommand().equals("修改成绩")){
+                                grade.setEditable(true);
+                                grade.setEnabled(true);
+                                updateButton.setText("保存");
+                            }
+                            if (e.getActionCommand().equals("保存")) {
+                                Course course = new Course();
+                                course.setStudentName(studentName.getText());
+                                course.setCourseName(courseName.getText());
+                                course.setTeacherName(teacherName.getText());
+                                course.setGrade(Double.valueOf(grade.getText()));
+                                course.setStudentId(studentIdLabel.getText());
+                                course.setDepartmentName(departmentLabel.getText());
+                                course.setClassName(classLabel.getText());
+                                int n = ServiceFacotry.getCourseServiceInstance().updateGrade(course);
+                                if (n == 1) {
+                                    model.setValueAt(departmentLabel.getText(), row, 1);
+                                    model.setValueAt(classLabel.getText(), row, 2);
+                                    model.setValueAt(studentIdLabel.getText(), row, 3);
+                                    model.setValueAt(studentName.getText(), row, 4);
+                                    model.setValueAt(courseName.getText(), row, 5);
+                                    model.setValueAt(grade.getText(), row, 6);
+                                    model.setValueAt(teacherName.getText(), row, 7);
+                                    departmentLabel.setText("");
+                                    classLabel.setText("");
+                                    courseName.setText("");
+                                    studentName.setText("");
+                                    studentIdLabel.setText("");
+                                    grade.setText("");
+                                    teacherName.setText("");
+                                    grade.setEditable(false);
+                                    grade.setEnabled(false);
+                                    updateButton.setText("修改成绩");
+                                    courseRrightPanel.setVisible(false);
+                                }
+                            }
+                        }
+                    });
+                }
+            });
     }
     public static void main(String[] args) throws Exception {
         String lookAndFeel = UIManager.getSystemLookAndFeelClassName();

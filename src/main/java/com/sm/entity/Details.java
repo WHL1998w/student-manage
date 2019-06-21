@@ -1,20 +1,16 @@
 package com.sm.entity;
 
-/**
- * 院系实体类
- */
-public class Department {
-    private Integer id;
+public class Details {
+    private Integer departmentId;
     private String departmentName;
-    private String logo;
     private String description;
 
-    public Integer getId() {
-        return id;
+    public Integer getDepartmentId() {
+        return departmentId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
     }
 
     public String getDepartmentName() {
@@ -25,14 +21,6 @@ public class Department {
         this.departmentName = departmentName;
     }
 
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -41,8 +29,13 @@ public class Department {
         this.description = description;
     }
 
+
     @Override
     public String toString() {
-        return departmentName;
+        return "Details{" +
+                "departmentId=" + departmentId +
+                ", departmentName='" + departmentName + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

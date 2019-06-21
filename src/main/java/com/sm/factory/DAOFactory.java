@@ -23,4 +23,19 @@ public class DAOFactory {
     public static StudentLoginDAO getStudnetLoginDAOInstance(){
         return new StudentLoginDAOImpl();
     }
+    public static ProfessionDAO getProfessionDAOInstance(){
+        return new ProfessionDAOImpl();
+    }
+    public static DetailsDAO getDetailsDAOInstance(){
+        return new DetailsDAOImpl();
+    }
+    public static CourseDAO getCourseDAOInstance(){
+        return new CourseDAOImpl();
+    }
+    public static SchoolDAO getSchoolDAOInstanche(){
+        return new SchoolDAOImpl();
+    }
+    public static DepartmentnNewsDAO getDepartmentNewsDAOInstance(){
+        return new DepartmentNewsDAOImpl();
+    }
 }

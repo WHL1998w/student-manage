@@ -29,21 +29,23 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public void deleteDepartment(int id) {
-        try {
-            departmentDAO.deleteDepartmentById(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public int addDepartment(Department department) {
         int n = 0;
         try {
             n = departmentDAO.insertDepartment(department);
         } catch (SQLException e) {
             System.err.print("新增院系信息出现异常");
+        }
+        return n;
+    }
+
+    @Override
+    public int updateDepartment(Department department) {
+        int n = 0;
+        try {
+            n = departmentDAO.updateDepartmentById(department);
+        } catch (SQLException e) {
+            System.out.println("修改院系出现错误");
         }
         return n;
     }
@@ -74,4 +76,17 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         return mapList;
     }
+
+    @Override
+    public List<Department> selectDepartmentById(int id) {
+        List<Department> departmentList = null;
+        try {
+            departmentList = departmentDAO.selectDepartmentById(id);
+        } catch (SQLException e) {
+            System.err.print("查询院系信息出现异常");
+        }
+        return departmentList;
+    }
+
+
 }

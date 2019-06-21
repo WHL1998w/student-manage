@@ -21,12 +21,20 @@ public interface DepartmentDAO {
      */
     int insertDepartment (Department department) throws SQLException;
 
+
     /**
-     * 删除院系
+     * 修改院系
+     * @param department
+     * @return int
+     * @throws SQLException
+     */
+    int updateDepartmentById(Department department) throws SQLException;
+
+    /**
+     * 根据院系id查找院系
      * @param id
      * @return int
      * @throws SQLException
      */
-
-    int deleteDepartmentById (int id) throws SQLException;
+    List<Department> selectDepartmentById(int id) throws SQLException;
 }

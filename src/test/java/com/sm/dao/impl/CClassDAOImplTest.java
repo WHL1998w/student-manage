@@ -36,7 +36,6 @@ public class CClassDAOImplTest {
      */
     @Test
     public void deleteById() {
-
         int n = 0;
         try {
             n = cClassDAO.deleteById(1);

@@ -13,13 +13,6 @@ public interface DepartmentService {
     List<Department> selectAll();
 
     /**
-     * 删除院系
-     * @param id
-     */
-
-    void deleteDepartment(int id);
-
-    /**
      * 新增院系
      * @param department
      * @return int
@@ -27,8 +20,21 @@ public interface DepartmentService {
     int addDepartment(Department department);
 
     /**
+     * 修改院系
+     * @param department
+     * @return
+     */
+    int updateDepartment(Department department);
+
+    /**
      *
      * @return
      */
     List<Map> selectDepartmentInfo();
+
+    /**
+     *
+     * @return
+     */
+    List<Department> selectDepartmentById(int id);
 }
