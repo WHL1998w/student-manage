@@ -2,6 +2,7 @@ package com.sm.service.impl;
 
 import com.sm.dao.TeacherLoginDAO;
 import com.sm.entity.Admin;
+import com.sm.entity.DepartmentNews;
 import com.sm.entity.TeacherLogin;
 import com.sm.factory.DAOFactory;
 import com.sm.service.TeacherLoginService;
@@ -9,6 +10,7 @@ import com.sm.utils.ResultEntity;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class TearcherLoginServiceImpl implements TeacherLoginService {
     private TeacherLoginDAO teacherLoginDAO = DAOFactory.getTeacherLoginDAOInstance();
@@ -39,5 +41,16 @@ public class TearcherLoginServiceImpl implements TeacherLoginService {
             resultEntity.setMessage("账号不存在");
         }
         return resultEntity;
+    }
+
+    @Override
+    public List<TeacherLogin> selectAll() {
+        List<TeacherLogin> teacherLoginList = null;
+        try {
+            teacherLoginList = teacherLoginDAO.selectAll();
+        } catch (SQLException e) {
+            System.err.print("查询老师账号相关信息出现异常");
+        }
+        return teacherLoginList;
     }
 }

@@ -1,7 +1,5 @@
 package com.sm.factory;
 
-import com.sm.dao.DetailsDAO;
-import com.sm.entity.Profession;
 import com.sm.service.*;
 import com.sm.service.impl.*;
 
@@ -40,5 +38,8 @@ public class ServiceFacotry {
     }
     public static DepartmentNewsService getDepartmentNewsServiceInstance(){
         return new DepartmentNewsServiceImpl();
+    }
+    public static TeacherService getTeachersServiceInstance(){
+        return new TeacherServieImpl();
     }
 }

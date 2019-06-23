@@ -1,6 +1,7 @@
 package com.sm.frame;
 
 import com.sm.entity.Course;
+import com.sm.entity.CourseVO;
 import com.sm.entity.StudentVO;
 import com.sm.factory.ServiceFacotry;
 import com.sm.ui.ImgPanel;
@@ -13,7 +14,7 @@ public class GradeFrame extends JFrame {
     private ImgPanel rootPanel;
     private JTextField idTextField;
     private JComboBox<StudentVO> studentNameComboBox;
-    private JComboBox<Course> courseComboBox;
+    private JComboBox<CourseVO> courseComboBox;
     private JTextField gradetextField;
     private JButton 新增Button;
     private JLabel 关闭Label;
@@ -42,13 +43,13 @@ public class GradeFrame extends JFrame {
             studentNameComboBox.addItem(studentVo);
         }
         //初始课程下拉框
-        Course tip5 = new Course();
+        CourseVO tip5 = new CourseVO();
         tip5.setCourseName("请选择课程");
-        tip5.setCourseNumber("课程编号");
+        tip5.setCourseName("课程编号");
         courseComboBox.addItem(tip5);
-        List<Course> courseList1 = ServiceFacotry.getCourseServiceInstance().selectAll();
-        for (Course course:courseList1) {
-            courseComboBox.addItem(course);
+        List<CourseVO> courseList1 = ServiceFacotry.getCourseServiceInstance().getSelectAll();
+        for (CourseVO courseVO:courseList1) {
+            courseComboBox.addItem(courseVO);
         }
 
         studentNameComboBox.addItemListener(new ItemListener() {

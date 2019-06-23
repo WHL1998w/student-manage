@@ -1,7 +1,8 @@
 package com.sm.frame;
 
 import com.eltima.components.ui.DatePicker;
-import com.sm.entity.*;
+import com.sm.entity.Rewards;
+import com.sm.entity.StudentVO;
 import com.sm.factory.ServiceFacotry;
 import com.sm.ui.ImgPanel;
 
@@ -12,22 +13,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class AdminRewardsFrame extends JFrame {
+public class AddRewardsFrame extends JFrame {
     private ImgPanel rootPanel;
+    private JLabel 关闭Label;
     private JComboBox<StudentVO> studentComboBox;
-    private String studentId;
+    private JPanel rekindPanel;
     private JRadioButton 奖RadioButton;
     private JRadioButton 惩RadioButton;
-    private JPanel rewardsPanel;
-    private JTextField rewardsTextField;
-    private JPanel timePanel;
+    private JTextField retextField;
+    private JPanel datePanel;
     private JButton 新增Button;
-    private JLabel 关闭Label;
     private JTextField idTextField;
-    private AdminMainFrame adminMainFrame;
-
-    public AdminRewardsFrame(AdminMainFrame adminMainFrame){
-        this.adminMainFrame = adminMainFrame;
+    private TeacherMainFrame teacherMainFrame;
+    private String studentId;
+    public AddRewardsFrame(TeacherMainFrame teacherMainFrame){
+        this.teacherMainFrame = teacherMainFrame;
         setContentPane(rootPanel);
         rootPanel.setFileName("bgb.jpg");
         rootPanel.repaint();
@@ -45,11 +45,10 @@ public class AdminRewardsFrame extends JFrame {
         tip4.setId("请选择学号");
         tip4.setStudentName("姓名");
         studentComboBox.addItem(tip4);
-        List<StudentVO> studentVOList1 = ServiceFacotry.getStudnetServiceInstance().selectAll();
+        List<StudentVO> studentVOList1 = ServiceFacotry.getStudnetServiceInstance().selectAdminAccount("13919532645");
         for (StudentVO studentVo:studentVOList1) {
             studentComboBox.addItem(studentVo);
         }
-
 
         studentComboBox.addItemListener(new ItemListener() {
             @Override
@@ -63,8 +62,8 @@ public class AdminRewardsFrame extends JFrame {
 
 
         DatePicker datepick = getDatePicker();
-        timePanel.add(datepick);
-        timePanel.revalidate();
+        datePanel.add(datepick);
+        datePanel.revalidate();
 
         新增Button.addActionListener(new ActionListener() {
             String kind = null;
@@ -80,14 +79,14 @@ public class AdminRewardsFrame extends JFrame {
                 rewards.setId(idTextField.getColumns());
                 rewards.setStudentId(studentId);
                 rewards.setKind(kind);
-                rewards.setAwardPunishment(rewardsTextField.getText());
+                rewards.setAwardPunishment(retextField.getText());
                 rewards.settDate((Date)datepick.getValue());
                 int n = ServiceFacotry.getRewardsServiceInstance().insert(rewards);
                 if (n == 1){
                     JOptionPane.showMessageDialog(rootPanel,"新增成功");
-                    AdminRewardsFrame.this.dispose();
-                    List<Rewards> rewardsList =  ServiceFacotry.getRewardsServiceInstance().selectAll();
-                    adminMainFrame.showRewards(rewardsList);
+                    AddRewardsFrame.this.dispose();
+                    List<Rewards> rewardsList =  ServiceFacotry.getRewardsServiceInstance().selectTeacherAccount("13919532645");
+                    teacherMainFrame.showStudentRewards(rewardsList);
                 }
             }
         });
@@ -95,7 +94,7 @@ public class AdminRewardsFrame extends JFrame {
         关闭Label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                AdminRewardsFrame.this.dispose();
+                AddRewardsFrame.this.dispose();
             }
         });
     }

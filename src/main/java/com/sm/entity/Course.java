@@ -11,6 +11,7 @@ public class Course {
    private String otherCourse;
   private Double grade;
   private String courseNumber;
+  private String teacherAccount;
 
     public Integer getId() {
         return id;
@@ -91,8 +92,28 @@ public class Course {
         this.courseNumber = courseNumber;
     }
 
+    public String getTeacherAccount() {
+        return teacherAccount;
+    }
+
+    public void setTeacherAccount(String teacherAccount) {
+        this.teacherAccount = teacherAccount;
+    }
+
     @Override
     public String toString() {
-        return courseNumber + "--" + courseName;
+        return "Course{" +
+                "id=" + id +
+                ", departmentName='" + departmentName + '\'' +
+                ", className='" + className + '\'' +
+                ", studentName='" + studentName + '\'' +
+                ", studentId='" + studentId + '\'' +
+                ", courseName='" + courseName + '\'' +
+                ", teacherName='" + teacherName + '\'' +
+                ", otherCourse='" + otherCourse + '\'' +
+                ", grade=" + grade +
+                ", courseNumber='" + courseNumber + '\'' +
+                ", teacherAccount='" + teacherAccount + '\'' +
+                '}';
     }
 }

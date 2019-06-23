@@ -1,6 +1,7 @@
 package com.sm.service;
 
 import com.sm.entity.Course;
+import com.sm.entity.CourseVO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -27,4 +28,8 @@ public interface CourseService {
     int updateGrade(Course course);
 
     int insertByStudentId(Course course);
+
+    List<Course> selectTeacherAccount(String adminAccount);
+
+    List<CourseVO> getSelectAll();
 }

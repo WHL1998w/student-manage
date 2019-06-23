@@ -38,4 +38,7 @@ public class DAOFactory {
     public static DepartmentnNewsDAO getDepartmentNewsDAOInstance(){
         return new DepartmentNewsDAOImpl();
     }
+    public static TeacherDAO getTeacherDAOInstance(){
+        return new TeacherDAOImpl();
+    }
 }

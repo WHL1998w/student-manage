@@ -33,4 +33,7 @@ public interface RewardsService {
      */
     int insert(Rewards rewards);
 
+    List<Rewards> selectTeacherAccount(String adminAccount);
+
+
 }

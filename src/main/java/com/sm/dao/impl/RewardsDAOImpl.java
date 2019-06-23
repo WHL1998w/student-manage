@@ -18,7 +18,7 @@ public class RewardsDAOImpl implements RewardsDAO {
     public List<Rewards> selectAll() throws SQLException {
         JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
         Connection connection = jdbcUtil.getConnection();
-        String sql = "SELECT t1.student_name,gender,t2.department_name,t3.class_name,t4.id,student_id,kind,award_punishment,t_date\n" +
+        String sql = "SELECT t1.student_name,gender,admin_account,t2.department_name,t3.class_name,t4.id,student_id,kind,award_punishment,t_date\n" +
                 "FROM t_student t1\n" +
                 "LEFT JOIN t_class t3\n" +
                 "ON t1.class_id=t3.id\n" +
@@ -45,7 +45,7 @@ public class RewardsDAOImpl implements RewardsDAO {
     public List<Rewards> selectByKeywords(String keywords) throws SQLException {
         JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
         Connection connection = jdbcUtil.getConnection();
-        String sql = "SELECT t1.*,t2.student_name,gender,t3.class_name,t4.department_name\n" +
+        String sql = "SELECT t1.*,t2.student_name,gender,admin_account,t3.class_name,t4.department_name\n" +
                 "FROM t_rewards t1\n" +
                 "LEFT JOIN t_student t2\n" +
                 "ON t1.student_id=t2.id\n" +
@@ -104,6 +104,29 @@ public class RewardsDAOImpl implements RewardsDAO {
         return n;
     }
 
+    @Override
+    public List<Rewards> selectTeacherAccount(String adminAccount) throws SQLException {
+        JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "SELECT t1.student_name,gender,admin_account,t2.department_name,t3.class_name,t4.id,student_id,kind,award_punishment,t_date\n" +
+                "FROM t_student t1\n" +
+                "LEFT JOIN t_class t3\n" +
+                "ON t1.class_id=t3.id\n" +
+                "LEFT JOIN t_department t2\n" +
+                "ON t3.department_id=t2.id\n" +
+                "LEFT JOIN t_rewards t4\n" +
+                "ON t4.student_id=t1.id\n"+
+                "WHERE t1.admin_account = ?";
+        PreparedStatement prstm = connection.prepareStatement(sql);
+        prstm.setString(1,adminAccount);
+        ResultSet rs = prstm.executeQuery();
+        List<Rewards> rewardsList = convert(rs);
+        rs.close();
+        jdbcUtil.closeConnection();
+        prstm.close();
+        return rewardsList;
+    }
+
     /**
      * 分装方法
      * @param rs
@@ -123,6 +146,7 @@ public class RewardsDAOImpl implements RewardsDAO {
             rewards.setGender(rs.getString("gender"));
             rewards.setKind(rs.getString("kind"));
             rewards.settDate(rs.getDate("t_date"));
+            rewards.setAdminAccount(rs.getString("admin_account"));
             rewardsList.add(rewards);
         }
         return rewardsList;

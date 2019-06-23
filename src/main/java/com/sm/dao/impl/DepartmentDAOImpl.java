@@ -17,7 +17,7 @@ public class DepartmentDAOImpl implements DepartmentDAO {
     public List<Department> getAll() throws SQLException {
         JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
         Connection connection = jdbcUtil.getConnection();
-        String sql = "SELECT * FROM t_department ";
+        String sql = "SELECT * FROM t_department";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         List<Department> departmentList = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.sm.dao.impl;
 
 import com.sm.dao.CourseDAO;
 import com.sm.entity.Course;
+import com.sm.entity.CourseVO;
 import com.sm.utils.JDBCUtil;
 
 import java.sql.*;
@@ -15,7 +16,7 @@ public class CourseDAOImpl implements CourseDAO {
     public List<Course> selectAll() throws SQLException {
         JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
         Connection connection = jdbcUtil.getConnection();
-        String sql = "SELECT t1.department_name,t2.class_name,t3.student_name,t4.id,student_id,course_name,grade,course_number,t5.teacher_name,other_course\n" +
+        String sql = "SELECT t1.department_name,t2.class_name,t3.student_name,admin_account,t4.id,student_id,course_name,grade,course_number,t5.teacher_name\n" +
                 "FROM t_department t1\n" +
                 "LEFT JOIN t_class t2\n" +
                 "ON t1.id=t2.department_id\n" +
@@ -72,13 +73,13 @@ public class CourseDAOImpl implements CourseDAO {
     public int insertByStudentId(Course course) throws SQLException {
         JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
         Connection connection = jdbcUtil.getConnection();
-        String sql = "INSERT INTO t_course VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO t_course VALUES (?,?,?,?)";
         PreparedStatement prstm = connection.prepareStatement(sql);
         prstm.setInt(1,course.getId());
         prstm.setString(2,course.getStudentId());
-        prstm.setString(3,course.getCourseName());
-        prstm.setDouble(4,course.getGrade());
-        prstm.setString(5,course.getCourseNumber());
+        //prstm.setString(3,course.getCourseName());
+        prstm.setDouble(3,course.getGrade());
+        prstm.setString(4,course.getCourseNumber());
         int n = prstm.executeUpdate();
         prstm.close();
         connection.close();
@@ -99,6 +100,51 @@ public class CourseDAOImpl implements CourseDAO {
         return n;
     }
 
+    @Override
+    public List<Course> selectTeacherAccount(String adminAccount) throws SQLException {
+        JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "SELECT t1.department_name,t2.class_name,t3.student_name,admin_account,t4.id,student_id,grade,course_number,t5.teacher_name,course_name\n" +
+                "FROM t_department t1\n" +
+                "LEFT JOIN t_class t2\n" +
+                "ON t1.id=t2.department_id\n" +
+                "LEFT JOIN t_student t3\n" +
+                "ON t2.id=t3.class_id\n" +
+                "LEFT JOIN t_course t4\n" +
+                "ON t3.id=t4.student_id\n" +
+                "LEFT JOIN t_teacher t5\n" +
+                "ON t4.course_number=t5.course_id\n" +
+                "WHERE t3.admin_account = ?";
+        PreparedStatement prstm = connection.prepareStatement(sql);
+        prstm.setString(1,adminAccount);
+        ResultSet rs = prstm.executeQuery();
+        List<Course> courseList = convert(rs);
+        rs.close();
+        jdbcUtil.closeConnection();
+        prstm.close();
+        return courseList;
+    }
+
+    @Override
+    public List<CourseVO> getSelectAll() throws SQLException {
+        JDBCUtil jdbcUtil = JDBCUtil.getInitJDBCUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "SELECT * FROM t_teacher ";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+        List<CourseVO> courseVOList = new ArrayList<>();
+        while (rs.next()) {
+            CourseVO courseVO = new CourseVO();
+            courseVO.setCourseName(rs.getString("course_name"));
+            courseVO.setCourseNumber(rs.getString("course_id"));
+            courseVOList.add(courseVO);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return courseVOList;
+    }
+
     //分装
     private List<Course> convert(ResultSet rs) throws SQLException{
         List<Course> courseList = new ArrayList<>();
@@ -111,9 +157,9 @@ public class CourseDAOImpl implements CourseDAO {
             course.setClassName(rs.getString("class_name"));
             course.setDepartmentName(rs.getString("department_name"));
             course.setTeacherName(rs.getString("teacher_name"));
-            course.setOtherCourse(rs.getString("other_course"));
             course.setStudentId(rs.getString("student_id"));
             course.setCourseNumber(rs.getString("course_number"));
+            course.setTeacherAccount(rs.getString("admin_account"));
             courseList.add(course);
         }
         return courseList;

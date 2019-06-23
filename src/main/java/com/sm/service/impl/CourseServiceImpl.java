@@ -2,6 +2,8 @@ package com.sm.service.impl;
 
 import com.sm.dao.CourseDAO;
 import com.sm.entity.Course;
+import com.sm.entity.CourseVO;
+import com.sm.entity.Rewards;
 import com.sm.factory.DAOFactory;
 import com.sm.service.CourseService;
 
@@ -52,5 +54,27 @@ public class CourseServiceImpl implements CourseService {
             System.out.println("新增学生成绩错误");
         }
         return n;
+    }
+
+    @Override
+    public List<Course> selectTeacherAccount(String adminAccount) {
+        List<Course> courseList = null;
+        try {
+            courseList = courseDAO.selectTeacherAccount(adminAccount);
+        } catch (SQLException e) {
+            System.out.println("根据老师账号查询错误");
+        }
+        return courseList;
+    }
+
+    @Override
+    public List<CourseVO> getSelectAll() {
+        List<CourseVO> courseList = null;
+        try {
+            courseList = courseDAO.getSelectAll();
+        } catch (SQLException e) {
+            System.out.println("查询课程信息错误");
+        }
+        return courseList;
     }
 }

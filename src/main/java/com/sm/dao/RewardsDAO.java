@@ -37,4 +37,12 @@ public interface RewardsDAO {
      * @throws SQLException
      */
     int insert(Rewards rewards) throws SQLException;
+
+    /**
+     * 根据老师账号查找学生奖惩
+     * @param adminAccount
+     * @return
+     * @throws SQLException
+     */
+    List<Rewards> selectTeacherAccount(String adminAccount) throws SQLException;
 }

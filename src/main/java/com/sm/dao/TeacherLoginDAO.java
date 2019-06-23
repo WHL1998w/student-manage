@@ -3,6 +3,7 @@ package com.sm.dao;
 import com.sm.entity.TeacherLogin;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface TeacherLoginDAO {
 
@@ -13,4 +14,6 @@ public interface TeacherLoginDAO {
      * @throws SQLException
      */
     TeacherLogin getTeacherByAccount(String teacherAccount) throws SQLException;
+
+    List<TeacherLogin> selectAll() throws SQLException;
 }

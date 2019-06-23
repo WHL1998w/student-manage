@@ -2,6 +2,7 @@ package com.sm.service.impl;
 
 import com.sm.dao.RewardsDAO;
 import com.sm.entity.Rewards;
+import com.sm.entity.StudentVO;
 import com.sm.factory.DAOFactory;
 import com.sm.service.RewardsService;
 
@@ -72,5 +73,16 @@ public class RewardsServiceImpl implements RewardsService {
             System.out.println("新增学生奖惩情况错误");
         }
         return n;
+    }
+
+    @Override
+    public List<Rewards> selectTeacherAccount(String adminAccount) {
+        List<Rewards> rewardsList = null;
+        try {
+            rewardsList = rewardsDAO.selectTeacherAccount(adminAccount);
+        } catch (SQLException e) {
+            System.out.println("根据老师账号查询错误");
+        }
+        return rewardsList;
     }
 }

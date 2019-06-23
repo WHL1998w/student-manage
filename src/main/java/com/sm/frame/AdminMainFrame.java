@@ -779,11 +779,10 @@ public class AdminMainFrame extends JFrame {
             JTable table = new JTable();
             DefaultTableModel model = new DefaultTableModel();
             table.setModel(model);
-            model.setColumnIdentifiers(new String[]{"编号","院系","班级","学号","姓名","科目","成绩","授课教师","其他课程"});
+            model.setColumnIdentifiers(new String[]{"编号","院系","班级","学号","姓名","科目","成绩","授课教师"});
             for (Course course:courseList) {
                 Object[] objects = new Object[]{course.getId(),course.getDepartmentName(),course.getClassName(),course.getStudentId(),
-                        course.getStudentName(),course.getCourseName(),course.getGrade(),course.getTeacherName(),
-                        course.getOtherCourse()};
+                        course.getStudentName(),course.getCourseName(),course.getGrade(),course.getTeacherName()};
                 model.addRow(objects);
             }
             JTableHeader head = table.getTableHeader();

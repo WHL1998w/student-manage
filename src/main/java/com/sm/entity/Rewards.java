@@ -12,6 +12,7 @@ public class Rewards {
    private String kind;
    private String awardPunishment;
    private Date tDate;
+   private String adminAccount;
 
     public Integer getId() {
         return id;
@@ -85,6 +86,14 @@ public class Rewards {
         this.tDate = tDate;
     }
 
+    public String getAdminAccount() {
+        return adminAccount;
+    }
+
+    public void setAdminAccount(String adminAccount) {
+        this.adminAccount = adminAccount;
+    }
+
     @Override
     public String toString() {
         return "Rewards{" +
@@ -97,6 +106,7 @@ public class Rewards {
                 ", kind='" + kind + '\'' +
                 ", awardPunishment='" + awardPunishment + '\'' +
                 ", tDate=" + tDate +
+                ", adminAccount='" + adminAccount + '\'' +
                 '}';
     }
 }

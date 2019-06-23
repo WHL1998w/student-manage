@@ -1,6 +1,7 @@
 package com.sm.dao;
 
 import com.sm.entity.Course;
+import com.sm.entity.CourseVO;
 import com.sm.entity.Rewards;
 
 import java.sql.SQLException;
@@ -39,4 +40,15 @@ public interface CourseDAO {
      * @throws SQLException
      */
     int updateGrade(Course course) throws SQLException;
+
+    /**
+     * 根据老师的账号查找成绩
+     * @param adminAccount
+     * @return
+     * @throws SQLException
+     */
+    List<Course> selectTeacherAccount(String adminAccount) throws SQLException;
+
+    List<CourseVO> getSelectAll() throws SQLException;
+
 }

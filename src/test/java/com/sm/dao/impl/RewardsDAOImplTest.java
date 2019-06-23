@@ -3,6 +3,7 @@ package com.sm.dao.impl;
 import com.sm.dao.RewardsDAO;
 import com.sm.entity.Rewards;
 import com.sm.entity.Student;
+import com.sm.entity.StudentVO;
 import com.sm.factory.DAOFactory;
 import org.junit.Test;
 
@@ -71,4 +72,14 @@ public class RewardsDAOImplTest {
 
     }
 
+    @Test
+    public void selectTeacherAccount() {
+        List<Rewards> rewardsList = null;
+        try {
+            rewardsList = rewardsDAO.selectTeacherAccount("13919532645");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        rewardsList.forEach(rewards -> System.out.println(rewards));
+    }
 }
